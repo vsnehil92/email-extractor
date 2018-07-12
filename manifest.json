@@ -7,7 +7,7 @@
    },
    "content_scripts": [ {
       "js": [ "js/Content.js" ],
-      "matches": [ "\u003Call_urls>" ]
+      "matches": [ "<all_urls>" ]
    } ],
    "default_locale": "en",
    "description": "__MSG_appDesc__",
