@@ -1,0 +1,24 @@
+.loader {
+    border: 6px solid #a8d9a8; 
+    border-top: 6px solid #398439; 
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: spin 1s linear infinite;
+}
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.icon-refresh-animate {
+	animation-name: rotateThis;
+	animation-duration: 0.7s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes rotateThis {
+	from { transform: scale( 1 ) rotate( 0deg );   }
+	to   { transform: scale( 1 ) rotate( 360deg ); }
+}

@@ -1,0 +1,56 @@
+{
+   "appDesc": {
+      "message": "Email Extractor економить час і зусилля по збору імейлів вручну. Забудьте про ручне копіювання і вставку."
+   },
+   "appLink": {
+      "message": "https://www.epochta.com.ua/products/extractor/?utm_source=hunter&utm_medium=extension"
+   },
+   "appLinkText": {
+      "message": "Автоматичний пошук імейлів c windows програмою"
+   },
+   "appName": {
+      "message": "Email hunter"
+   },
+   "appShortName": {
+      "message": "Web Email Extractor"
+   },
+   "autosearchLabelLong": {
+      "message": "Автопошук імейлів по активному домену"
+   },
+   "autosearchLabelShort": {
+      "message": "Автопошук"
+   },
+   "badEval": {
+      "message": "Шкодуємо. Будь ласка, напишіть нам на alex@atompark.com про ваші пропозиції або задайте будь-яке питання \u003Chr>"
+   },
+   "emailsFromAllPages": {
+      "message": "Адреси з усіх сторінок"
+   },
+   "exportAll": {
+      "message": "Експорт всіх"
+   },
+   "exportCurrent": {
+      "message": "Експорт поточних"
+   },
+   "keepEmailsFromAllPages": {
+      "message": "Зберігати адреси з усіх сторінок"
+   },
+   "optInfo": {
+      "message": "Дозволити розширенню відправляти нам зібрані імейли."
+   },
+   "optInfo2": {
+      "message": "Допоможіть нам зробити наш сервіс краще відправляючи нам зібрані імейли з відвіданих сайтів."
+   },
+   "optSave": {
+      "message": "Зберегти"
+   },
+   "pageEmails": {
+      "message": "Адреси з активною сторінки"
+   },
+   "pleaseRateUs": {
+      "message": "Будь ласка, оцініть нас. Це важливо!"
+   },
+   "searchByDomain": {
+      "message": "Пошук імейлів по активному домену"
+   }
+}

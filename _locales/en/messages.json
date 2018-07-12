@@ -1,0 +1,56 @@
+{
+   "appDesc": {
+      "message": "Email Extractor tool that save time and efforts. Forget copy and paste ache. It collects emails as you browse websites."
+   },
+   "appLink": {
+      "message": "https://www.massmailsoftware.com/extractweb/?utm_source=hunter&utm_medium=extension"
+   },
+   "appLinkText": {
+      "message": "Automate email search with a desktop app"
+   },
+   "appName": {
+      "message": "Email Hunter"
+   },
+   "appShortName": {
+      "message": "Web Email Extractor"
+   },
+   "autosearchLabelLong": {
+      "message": "Auto search by current domain"
+   },
+   "autosearchLabelShort": {
+      "message": "Auto search"
+   },
+   "badEval": {
+      "message": "Oh, Snap! Looks like we should do something right now! Please drop us a line at alex@atompark.com with your suggestions or ask any question\u003Chr>"
+   },
+   "emailsFromAllPages": {
+      "message": "Emails from all pages"
+   },
+   "exportAll": {
+      "message": "Export all"
+   },
+   "exportCurrent": {
+      "message": "Export current"
+   },
+   "keepEmailsFromAllPages": {
+      "message": "Keep emails from all pages"
+   },
+   "optInfo": {
+      "message": "Let this tool send us emails you collect so we build better database."
+   },
+   "optInfo2": {
+      "message": "Help us bring better value by allowing Email Hunter to anonymously track and identify the most popular websites along with emails."
+   },
+   "optSave": {
+      "message": "Save"
+   },
+   "pageEmails": {
+      "message": "Page emails"
+   },
+   "pleaseRateUs": {
+      "message": "Please, rate us, that's important!"
+   },
+   "searchByDomain": {
+      "message": "Search emails by current domain"
+   }
+}

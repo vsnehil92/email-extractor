@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/switcher.css">
+    <link rel="stylesheet" href="../css/animation.css">
+    <link rel="stylesheet" href="../css/stars.css">
+    <script src="../js/Popup.js"></script>
+    <script src="../js/Common.js"></script>
+    <script src="../js/tld.js"></script>
+</head>
+
+<body>
+    <form>
+        <div id="allStars" hidden="true">
+            <div id="pleaseRateUs" style="text-align:center; color:DarkOrange">Please, rate us, that's important!</div>
+            <div class="stars">
+                <input type="radio" name="star" class="star-1" id="star-1" />
+                <label class="star-1" for="star-1">1</label>
+                <input type="radio" name="star" class="star-2" id="star-2" />
+                <label class="star-2" for="star-2">2</label>
+                <input type="radio" name="star" class="star-3" id="star-3" />
+                <label class="star-3" for="star-3">3</label>
+                <input type="radio" name="star" class="star-4" id="star-4" />
+                <label class="star-4" for="star-4">4</label>
+                <input type="radio" name="star" class="star-5" id="star-5" />
+                <label class="star-5" for="star-5">5</label>
+                <span></span>
+                <hr>
+            </div>
+        </div>
+
+        <div id="badEval" style="text-align:center; color:blue" hidden="true">Oh, Snap! Looks like we should do something right now! Please drop us a line at alex@atompark.com with your suggestions or ask any question</div>
+
+        <!--<div id="badEval" hidden="true">
+            <center><h5>Sorry to hear this. Please drop us a line at contact@*.* if you want to give us a feedback or ask any question. We would be happy to help.</h5></center>
+        </div>-->
+
+        <div>
+            <label class="switch">
+                <input type="checkbox" checked="true" id="autosearch">
+                <div class="slider round"></div>
+            </label>
+            <label style="font-weight: normal; display: inline;" id="autosearchLabel">Auto search</label>
+            
+            <div id="searchByDomain2" style="text-align: right; display: none;">
+                <button id="searchByDomain" type="button" class="btn btn-info btn-xs">Search emails by current domain</button>
+            </div>
+
+            <img id="bingAnimate" id="address-books" style="cursor: pointer; display:none;" src="../img/refresh.png" />
+            <hr>
+        </div>
+
+        <div>
+            <label id="pageEmailsLabel" style="display: inline; font-size: 9pt">Page emails:</label>
+            <textarea type="text" class="form-control" id="pageEmails" rows="8" style="font-size: 9pt"></textarea>
+
+            <label id="allEmailsLabel" style="display: none; font-size: 9pt">Emails from all pages:</label>
+            <img id="cleanAllEmails" style="cursor: pointer; display: none;" src="../img/clear_16_grey.png">
+            <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt; display: none"></textarea>
+
+            <label class="switch">
+                <input type="checkbox" checked="true" id="collectEmails">
+                <div class="slider round"></div>
+            </label>
+            <label style="font-weight: normal; display: inline;" id="collectEmailsLabel">Keep emails from all pages</label>
+
+            <div>
+                <a download="CurrentPageList.txt" id="btnExport" style="display: none; font-size: 9pt;">Export current</a>
+                <a download="AllCollectedEmails.txt" id="btnExportAll" style="display: none; font-size: 9pt; padding: 0 5px;">Export all</a>
+            </div>
+
+            <hr>
+            <div>
+                <a href="https://www.massmailsoftware.com/extractweb/" style="font-size: 9pt;" target="_blank" id="appLink">Automate email search with a desktop app</a>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>
