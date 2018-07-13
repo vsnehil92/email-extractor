@@ -71,8 +71,6 @@ function localizeHtml() {
     document.getElementById('btnExport').innerText = chrome.i18n.getMessage('exportCurrent');
     document.getElementById('btnExportAll').innerText = chrome.i18n.getMessage('exportAll');
 
-    document.getElementById('searchByDomain').innerText = chrome.i18n.getMessage('searchByDomain');
-
     document.getElementById('appLink').innerHTML = '<a href="' + chrome.i18n.getMessage('appLink') + '" style="font-size: 9pt;"  target="_blank" id="appLink">' + chrome.i18n.getMessage('appLinkText') + '</a>';
 }
 
@@ -180,10 +178,8 @@ chrome.tabs.getSelected(null, function (tab) {
 
     document.getElementById('autosearch').checked = !(localStorage['disableAutosearch'] === 'true');
     if (localStorage['disableAutosearch'] !== 'true') {
-        hide(document.getElementById('searchByDomain2'));
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
     } else {
-        show(document.getElementById('searchByDomain2'), 'inline');
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
     }
 
@@ -191,10 +187,8 @@ chrome.tabs.getSelected(null, function (tab) {
         localStorage['disableAutosearch'] = !document.getElementById('autosearch').checked;
 
         if (!document.getElementById('autosearch').checked) {
-            show(document.getElementById('searchByDomain2'), 'inline');
             document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
         } else {
-            hide(document.getElementById('searchByDomain2'));
             document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
         }
     });
@@ -226,11 +220,6 @@ chrome.tabs.getSelected(null, function (tab) {
     document.getElementById('cleanAllEmails').addEventListener('click', function () {
         document.getElementById('allEmails').value = '';
         localStorage['collectedEmails'] = '';
-    });
-
-    document.getElementById('searchByDomain').addEventListener('click', function () {
-        var newURL = 'http://www.bing.com/search?q="*%40' + tldjs.getDomain(tab.url) + '"';
-        chrome.tabs.create({ url: newURL });
     });
 
 });
