@@ -51,7 +51,7 @@ function saveCollectedEmails(emails) {
 }
 
 function showEmails(emails, symbol) {
-    if (emails && (emails.length > 0)) {
+    if (emails && (emails.length > 0) && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
         if (symbol) {
             chrome.browserAction.setBadgeText({ "text": symbol, tabId: tabId_ });
         } else {

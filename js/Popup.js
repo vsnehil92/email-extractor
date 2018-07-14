@@ -11,7 +11,7 @@ function showEmails(data) {
         return txtFile;
     };
 
-    if (data) {
+    if (data && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
         emails = data.slice();
         var textFile = null;
         var textFile2 = null;
@@ -31,10 +31,6 @@ function showEmails(data) {
                     if ((email !== '') && (emails.indexOf(email) < 0)) {
                         emails.push(email);
                     }
-                }
-            } else {
-                if (emails.length > 0) {
-                    showStars();
                 }
             }
 
@@ -58,6 +54,7 @@ function showEmails(data) {
         document.getElementById('btnExportAll').style.display = 'inline-block';
     } else {
         hide(document.getElementById('allEmails'));
+        hide(document.getElementById('pageEmails'));
         hide(document.getElementById('allEmailsLabel'));
     }
 }
@@ -66,7 +63,6 @@ function localizeHtml() {
     document.getElementById('pageEmailsLabel').innerText = chrome.i18n.getMessage('pageEmails') + ':';
 
     document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages');
-    document.getElementById('collectEmailsLabel').innerHTML = chrome.i18n.getMessage('keepEmailsFromAllPages');
 
     document.getElementById('btnExport').innerText = chrome.i18n.getMessage('exportCurrent');
     document.getElementById('btnExportAll').innerText = chrome.i18n.getMessage('exportAll');
@@ -112,59 +108,16 @@ function searchEmailsInBing(domain, tabId, secondPage) {
             parseSearchEmailsInBing(xhr.responseText, url, domain, tabId);
             if (!secondPage && xhr.responseText.indexOf('"b_pag"') > 0) {
                 setTimeout(searchEmailsInBing, 1000, domain, tabId, true);
-                // searchEmailsInBing(domain, tabId, true);    
+                // searchEmailsInBing(domain, tabId, true);
             }
         }
     };
     xhr.send();
 }
 
-function showStars() {
-    var impressions = 0;
-    if (localStorage['impressions']) {
-        impressions = localStorage['impressions'];
-    }
-    impressions++;
-    localStorage['impressions'] = impressions;
-
-    if (impressions > 19) {
-        if (localStorage['needShowRate'] == undefined) {
-            localStorage['needShowRate'] = 1;
-        }
-    }
-
-    if (localStorage['needShowRate'] && (localStorage['needShowRate'] == 1) && ((impressions % 5) == 0)) {
-        document.getElementById('pleaseRateUs').innerText = chrome.i18n.getMessage('pleaseRateUs');
-        show(document.getElementById('allStars'));
-
-        document.getElementById('star-5').addEventListener('click', function () {
-            hide(document.getElementById('allStars'));
-            localStorage['needShowRate'] = 0;
-
-            var newURL = 'https://chrome.google.com/webstore/detail/email-hunter/igpjommeafjpifagkfhebdbofcokbhcb/reviews';
-            chrome.tabs.create({ url: newURL });
-
-            localStorage['star'] = 5;
-        });
-
-        function badEval(star) {
-            document.getElementById('badEval').innerHTML = chrome.i18n.getMessage('badEval');
-            show(document.getElementById('badEval'));
-            hide(document.getElementById('allStars'));
-            localStorage['needShowRate'] = 0;
-            localStorage['star'] = star;
-        }
-
-        document.getElementById('star-1').addEventListener('click', function () { badEval(1); });
-        document.getElementById('star-2').addEventListener('click', function () { badEval(2); });
-        document.getElementById('star-3').addEventListener('click', function () { badEval(3); });
-        document.getElementById('star-4').addEventListener('click', function () { badEval(4); });
-    }
-}
-
-chrome.tabs.getSelected(null, function (tab) {
+chrome.tabs.query ({active: true, currentWindow: true}, function (tabs) {
     localizeHtml();
-
+    var tab = tabs[0];
     var a = document.createElement('a');
     a.href = tab.url;
 
@@ -174,10 +127,21 @@ chrome.tabs.getSelected(null, function (tab) {
 
     document.getElementById('collectEmails').addEventListener('change', function () {
         localStorage['disableCollectEmails'] = !document.getElementById('collectEmails').checked;
+      if (!document.getElementById('collectEmails').checked) {
+        document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
+        hide(document.getElementById('allEmails'));
+        hide(document.getElementById('pageEmails'));
+        hide(document.getElementById('allEmailsLabel'));
+      } else {
+        document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
+        show(document.getElementById('allEmails'));
+        show(document.getElementById('pageEmails'));
+        show(document.getElementById('allEmailsLabel'));
+      }
     });
 
     document.getElementById('autosearch').checked = !(localStorage['disableAutosearch'] === 'true');
-    if (localStorage['disableAutosearch'] !== 'true') {
+    if (localStorage['disableCollectEmails'] !== 'true') {
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
     } else {
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
