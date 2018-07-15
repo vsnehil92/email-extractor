@@ -3,19 +3,20 @@
       "message": "Email Extractor tool that save time and efforts. Forget copy and paste ache. It collects emails as you browse websites."
    },
    "appName": {
-      "message": "Email Hunter"
+      "message": "Email Extractor"
    },
    "appShortName": {
       "message": "Web Email Extractor"
    },
    "autosearchLabelLong": {
-      "message": "Auto search by current domain"
+      "message": "On"
    },
    "autosearchLabelShort": {
-      "message": "Auto search by short"
+
+      "message": "Off"
    },
    "badEval": {
-      "message": "Oh, Snap! Looks like we should do something right now! Please drop us a line at alex@atompark.com with your suggestions or ask any question\u003Chr>"
+      "message": "Oh, Snap! Looks like we should do something right now! Please drop us a line at me@ashutoshksingh.com with your suggestions or ask any question\u003Chr>"
    },
    "emailsFromAllPages": {
       "message": "Emails from all pages"
@@ -25,9 +26,6 @@
    },
    "exportCurrent": {
       "message": "Export current"
-   },
-   "keepEmailsFromAllPages": {
-      "message": "Keep emails from all pages"
    },
    "optInfo": {
       "message": "Let this tool send us emails you collect so we build better database."
