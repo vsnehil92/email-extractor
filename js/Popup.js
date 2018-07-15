@@ -143,7 +143,6 @@ chrome.tabs.query ({active: true, currentWindow: true}, function (tabs) {
     document.getElementById('autosearch').checked = !(localStorage['disableAutosearch'] === 'true');
 
     if (localStorage['disableCollectEmails'] !== 'true') {
-
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
     } else {
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
