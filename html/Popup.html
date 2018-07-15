@@ -15,10 +15,9 @@
 
 <body>
     <form>
-        <div id="badEval" style="text-align:center; color:blue" hidden="true">Oh, Snap! Looks like we should do something right now!</div>
         <div>
             <label class="switch">
-                <input type="checkbox" checked="true" id="autosearch">
+                <input type="checkbox" checked="true" id="collectEmails">
                 <div class="slider round"></div>
             </label>
             <label style="font-weight: normal; display: inline;" id="autosearchLabel">Auto search</label>
@@ -35,11 +34,10 @@
             <img id="cleanAllEmails" style="cursor: pointer; display: none;" src="../img/clear_16_grey.png">
             <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt; display: none"></textarea>
 
-            <label class="switch">
-                <input type="checkbox" checked="true" id="collectEmails">
+            <label class="switch" style="display: none;">
+                <input type="checkbox" checked="true" id="autosearch" hidden="true">
                 <div class="slider round"></div>
             </label>
-            <label style="font-weight: normal; display: inline;" id="collectEmailsLabel">Keep emails from all pages</label>
 
             <div>
                 <button download="CurrentPageList.csv" id="btnExport" style="display: none; font-size: 9pt;">Export current</button>
