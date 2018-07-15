@@ -32,9 +32,6 @@
    "exportCurrent": {
       "message": "Експорт поточних"
    },
-   "keepEmailsFromAllPages": {
-      "message": "Зберігати адреси з усіх сторінок"
-   },
    "optInfo": {
       "message": "Дозволити розширенню відправляти нам зібрані імейли."
    },
