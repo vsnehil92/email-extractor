@@ -2,12 +2,6 @@
    "appDesc": {
       "message": "Email Extractor tool that save time and efforts. Forget copy and paste ache. It collects emails as you browse websites."
    },
-   "appLink": {
-      "message": "https://www.massmailsoftware.com/extractweb/?utm_source=hunter&utm_medium=extension"
-   },
-   "appLinkText": {
-      "message": "Automate email search with a desktop app"
-   },
    "appName": {
       "message": "Email Hunter"
    },
@@ -46,8 +40,5 @@
    },
    "pageEmails": {
       "message": "Page emails"
-   },
-   "pleaseRateUs": {
-      "message": "Please, rate us, that's important!"
    }
 }

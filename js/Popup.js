@@ -71,7 +71,6 @@ function localizeHtml() {
     document.getElementById('btnExport').innerText = chrome.i18n.getMessage('exportCurrent');
     document.getElementById('btnExportAll').innerText = chrome.i18n.getMessage('exportAll');
 
-    document.getElementById('appLink').innerHTML = '<a href="' + chrome.i18n.getMessage('appLink') + '" style="font-size: 9pt;"  target="_blank" id="appLink">' + chrome.i18n.getMessage('appLinkText') + '</a>';
 }
 
 function parseSearchEmailsInBing(response, url, domain, tabId) {
@@ -133,33 +132,6 @@ function showStars() {
         }
     }
 
-    if (localStorage['needShowRate'] && (localStorage['needShowRate'] == 1) && ((impressions % 5) == 0)) {
-        document.getElementById('pleaseRateUs').innerText = chrome.i18n.getMessage('pleaseRateUs');
-        show(document.getElementById('allStars'));
-
-        document.getElementById('star-5').addEventListener('click', function () {
-            hide(document.getElementById('allStars'));
-            localStorage['needShowRate'] = 0;
-
-            var newURL = 'https://chrome.google.com/webstore/detail/email-hunter/igpjommeafjpifagkfhebdbofcokbhcb/reviews';
-            chrome.tabs.create({ url: newURL });
-
-            localStorage['star'] = 5;
-        });
-
-        function badEval(star) {
-            document.getElementById('badEval').innerHTML = chrome.i18n.getMessage('badEval');
-            show(document.getElementById('badEval'));
-            hide(document.getElementById('allStars'));
-            localStorage['needShowRate'] = 0;
-            localStorage['star'] = star;
-        }
-
-        document.getElementById('star-1').addEventListener('click', function () { badEval(1); });
-        document.getElementById('star-2').addEventListener('click', function () { badEval(2); });
-        document.getElementById('star-3').addEventListener('click', function () { badEval(3); });
-        document.getElementById('star-4').addEventListener('click', function () { badEval(4); });
-    }
 }
 
 chrome.tabs.getSelected(null, function (tab) {
