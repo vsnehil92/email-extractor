@@ -2,12 +2,6 @@
    "appDesc": {
       "message": "Email Extractor экономит время и усилия по сбору имейлов вручную. Забудьте о ручном копировании и вставке."
    },
-   "appLink": {
-      "message": "https://www.epochta.ru/extractor/?utm_source=hunter&utm_medium=extension"
-   },
-   "appLinkText": {
-      "message": "Автоматический поиск имейлов c windows программой"
-   },
    "appName": {
       "message": "Email hunter"
    },
@@ -43,8 +37,5 @@
    },
    "pageEmails": {
       "message": "Адреса с активной страницы"
-   },
-   "pleaseRateUs": {
-      "message": "Пожалуйста, оцените нас. Это важно!"
    }
 }

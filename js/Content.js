@@ -28,7 +28,7 @@ function prepareEmails(emails, domain) {
             }
 
             var ext = email.slice(-4);
-            if ((ext === '.png') || (ext === '.jpg') || (ext === '.gif') || (ext === '.css')) {
+            if ((ext === '.png') || (ext === '.jpg') || (ext === '.gif') || (ext === '.css') || (ext === '.jpeg')) {
                 continue;
             }
             var ext2 = email.slice(-3);

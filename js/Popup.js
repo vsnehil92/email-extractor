@@ -1,13 +1,13 @@
 function showEmails(data) {
     makeTextFile = function (text, txtFile) {
-        var data = new Blob([text], { type: 'text/plain' });
+        var data = new Blob([text], { type: 'text/csv' });
 
         if (txtFile !== null) {
+            console.log(txtFile);
             window.URL.revokeObjectURL(txtFile);
         }
 
         txtFile = window.URL.createObjectURL(data);
-
         return txtFile;
     };
 
@@ -38,6 +38,7 @@ function showEmails(data) {
 
             document.getElementById('btnExport').href = makeTextFile(emails.join('\r\n'), textFile);
             document.getElementById('btnExport').style.display = 'inline-block';
+            document.getElementById('butonexp').style.display = 'inline-block';
             document.getElementById('pageEmailsLabel').innerText = chrome.i18n.getMessage('pageEmails') + ' (' + emails.length + '):';
         }
     }
@@ -49,13 +50,18 @@ function showEmails(data) {
         document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages') + ' (' + localStorage['collectedEmails'].split('\n').length + '):';
         document.getElementById('cleanAllEmails').style.display = 'inline-block';
         document.getElementById('allEmails').style.display = 'inline-block';
-
         document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
         document.getElementById('btnExportAll').style.display = 'inline-block';
+        document.getElementById('butonexpall').style.display = 'inline-block';
     } else {
-        hide(document.getElementById('allEmails'));
         hide(document.getElementById('pageEmails'));
-        hide(document.getElementById('allEmailsLabel'));
+        hide(document.getElementById('pageEmailsLabel'));
+        if(localStorage['collectedEmails'] != undefined || localStorage['collectedEmails'] != null) {
+            document.getElementById('allEmails').value = localStorage['collectedEmails'];
+            document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
+            document.getElementById('btnExportAll').style.display = 'inline-block';
+            document.getElementById('butonexpall').style.display = 'inline-block';
+        }
     }
 }
 
@@ -67,7 +73,6 @@ function localizeHtml() {
     document.getElementById('btnExport').innerText = chrome.i18n.getMessage('exportCurrent');
     document.getElementById('btnExportAll').innerText = chrome.i18n.getMessage('exportAll');
 
-    document.getElementById('appLink').innerHTML = '<a href="' + chrome.i18n.getMessage('appLink') + '" style="font-size: 9pt;"  target="_blank" id="appLink">' + chrome.i18n.getMessage('appLinkText') + '</a>';
 }
 
 function parseSearchEmailsInBing(response, url, domain, tabId) {
@@ -115,6 +120,7 @@ function searchEmailsInBing(domain, tabId, secondPage) {
     xhr.send();
 }
 
+
 chrome.tabs.query ({active: true, currentWindow: true}, function (tabs) {
     localizeHtml();
     var tab = tabs[0];
@@ -129,18 +135,21 @@ chrome.tabs.query ({active: true, currentWindow: true}, function (tabs) {
         localStorage['disableCollectEmails'] = !document.getElementById('collectEmails').checked;
       if (!document.getElementById('collectEmails').checked) {
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
-        hide(document.getElementById('allEmails'));
         hide(document.getElementById('pageEmails'));
-        hide(document.getElementById('allEmailsLabel'));
+        hide(document.getElementById('pageEmailsLabel'));
+        hide(document.getElementsById('butonexp'));
+        hide(document.getElementsById('butonexpall'));
       } else {
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
-        show(document.getElementById('allEmails'));
         show(document.getElementById('pageEmails'));
-        show(document.getElementById('allEmailsLabel'));
+        show(document.getElementById('pageEmailsLabel'));
+        show(document.getElementsById('butonexp'));
+        show(document.getElementsById('butonexpall'));
       }
     });
 
     document.getElementById('autosearch').checked = !(localStorage['disableAutosearch'] === 'true');
+
     if (localStorage['disableCollectEmails'] !== 'true') {
         document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
     } else {
