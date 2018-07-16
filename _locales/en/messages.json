@@ -9,16 +9,16 @@
       "message": "Web Email Extractor"
    },
    "autosearchLabelLong": {
-      "message": "On"
+      "message": "Autosearch On"
    },
    "autosearchLabelShort": {
-      "message": "Off"
+      "message": "Autosearch Off"
    },
    "badEval": {
       "message": "Oh, Snap! Looks like we should do something right now! Please drop us a line at me@ashutoshksingh.com with your suggestions or ask any question\u003Chr>"
    },
    "emailsFromAllPages": {
-      "message": "Emails from all pages"
+      "message": "local storage mails"
    },
    "exportAll": {
       "message": "Export all"
@@ -36,6 +36,6 @@
       "message": "Save"
    },
    "pageEmails": {
-      "message": "Page emails"
+      "message": "email on this page:"
    }
 }

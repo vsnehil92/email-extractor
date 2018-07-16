@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/switcher.css">
     <link rel="stylesheet" href="../css/animation.css">
-    <link rel="stylesheet" href="../css/stars.css">
     <script src="../js/Popup.js"></script>
     <script src="../js/Common.js"></script>
     <script src="../js/tld.js"></script>
@@ -27,24 +26,24 @@
         </div>
 
         <div>
-            <label id="pageEmailsLabel" style="display: inline; font-size: 9pt">Page emails:</label>
+            <label id="pageEmailsLabel" style="display: inline; font-size: 9pt">email on this page:</label>
             <textarea type="text" class="form-control" id="pageEmails" rows="8" style="font-size: 9pt"></textarea>
-
-            <label id="allEmailsLabel" style="display: none; font-size: 9pt">Emails from all pages:</label>
-            <img id="cleanAllEmails" style="cursor: pointer; display: none;" src="../img/clear_16_grey.png">
-            <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt; display: none"></textarea>
+            <div style="white-space: nowrap">
+                <label id="allEmailsLabel" style="font-size: 9pt">Emails from all pages:</label>
+                <img id="cleanAllEmails" style="cursor: pointer;" src="../img/del.png">
+            </div>
+            <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt"></textarea>
 
             <label class="switch" style="display: none;">
                 <input type="checkbox" checked="true" id="autosearch" hidden="true">
                 <div class="slider round"></div>
             </label>
 
-            <div>
-                <button download="CurrentPageList.csv" id="btnExport" style="display: none; font-size: 9pt;">Export current</button>
-                <button download="AllCollectedEmails.csv" id="btnExportAll" style="display: none; font-size: 9pt; padding: 0 5px;">Export all</button>
-            </div>
-
             <hr>
+            <div>
+                <button id='butonexp' style="display: none;"><a download="CurrentPageList.csv" id="btnExport" style="display: none; font-size: 9pt;">Export current</a></button>
+                <button id="butonexpall" style="display: none;"><a download="AllCollectedEmails.csv" id="btnExportAll" style="display: none; font-size: 9pt; padding: 0 5px;">Export all</a></button>
+            </div>
         </div>
     </form>
 </body>
