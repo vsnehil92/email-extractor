@@ -13,11 +13,9 @@
    "description": "__MSG_appDesc__",
    "icons": {
    },
-   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtf3l7L9HWRgghmAJa0UTnMA5LDg3DsEhX64hQV3v//rDOEvsJFiXF5eU2/5+OLRno4MT+6yWoL8fP1l/V9ARSwtraixC0RktFhrAfyJFCfqPkONdkgmkawMPfAtBB8jNpivY+JZ2RmA2w69HoFx2Iy85eSuTpSCP2wr14otiJzcobIBDVXWSsLR/+ToCBmHbEWb53mFrkmG6tVHSKKxZ6BfN1Grt+GUxxHCknaIQ+oubWf5PzTJCtuSqg2DK7YpKtUbYx8iIzBfuq1jpgB8EEi93qsu/Asu3fGEoFYt4KUxlz59FoPr0ZD+M1WowK/Z5mzxOK2PCo/HFUya81nMOvwIDAQAB",
    "manifest_version": 2,
    "name": "__MSG_appName__",
    "permissions": [ "tabs", "activeTab", "http://*/", "https://*/", "cookies", "storage", "management" ],
    "short_name": "__MSG_appShortName__",
-   "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.0.6"
+   "version": "1.0.0"
 }
