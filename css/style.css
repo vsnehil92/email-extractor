@@ -1,9 +1,11 @@
 body {
-    padding: 5px 5px;
     font-family: Lato, 'Open Sans', Arial, sans-serif;
 }
 
-form {
+#content {
+    padding: 5px 5px;
+}
+.tab-pane {
     width: 350px;
 }
 
@@ -19,4 +21,12 @@ hr {
     margin-right: auto;
     /*border-style: inset;*/
     border-width: 1px;
+}
+
+.nav>li {
+    display: inline-block;
+}
+
+.nav {
+    padding-left: 7%;
 }
