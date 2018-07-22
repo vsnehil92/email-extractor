@@ -15,13 +15,14 @@ var invalidLocalParts = ['the', '2', '3', '4', '123', '20info', 'aaa', 'ab', 'ab
     'name', 'need', 'nfo', 'ninfo', 'now', 'o', 'online', 'post', 'rcom.TripResearch.userreview.UserReviewDisplayInfo', 's', 'sales2', 'test', 'up', 'we', 'www', 'xxx', 'xxxxx', 
     'y', 'username', 'firstname.lastname'];
 
-function prepareEmails(emails, domain) {
+function prepareEmails(emails, domain, method) {
     var emailsNew = [];
     for (var iNo = 0; iNo < emails.length; iNo++) {
         var email = emails[iNo].toLowerCase().trim();
 
         if ((emailsNew.indexOf(email) < 0)) {
-            if (domain) {
+            if (domain && method === 'extractEmails') {
+                alert('here');
                 if (email.indexOf(domain) < 1) {
                     continue;
                 };
@@ -83,7 +84,11 @@ function prepareEmails(emails, domain) {
             };
 
             if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
-                emailsNew.push(email);
+                let split = email.split('@');
+                let dom = split[1];
+                let newEmail = {email: email, domain: dom, source: domain};
+                newEmail = JSON.stringify(newEmail);
+                emailsNew.push(newEmail);
             }
         }
     }
@@ -91,11 +96,11 @@ function prepareEmails(emails, domain) {
     return emailsNew;
 }
 
-function searchEmails(pageText, domain) {
+function searchEmails(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
     if ((emails !== null) && (emails.length > 0)) {
-        return prepareEmails(emails, domain);
+        return prepareEmails(emails, domain, method);
     }
 }
 
@@ -255,16 +260,16 @@ function searchContactsGmail(source) {
 
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
     if (request.method == 'getEmails') {
-        sendResponse({ data: searchEmails(document.all[0].innerHTML), method: 'getEmails' });
+        sendResponse({ data: searchEmails(document.all[0].innerHTML, request.domain), method: 'getEmails' });
     } else
         if (request.method == 'getEmailsBing') {
-            sendResponse({ data: searchEmails(document.all[0].innerText), method: 'getEmailsBing' });
+            sendResponse({ data: searchEmails(document.all[0].innerText ,request.domain), method: 'getEmailsBing' });
         } else
             if (request.method == 'getEmailsGoogle') {
-                sendResponse({ data: searchEmails(document.all[0].innerText), method: 'getEmailsGoogle' });
+                sendResponse({ data: searchEmails(document.all[0].innerText, request.domain), method: 'getEmailsGoogle' });
             } else
                 if (request.method == 'getEmailsGmail') {
-                    sendResponse({ data: searchContactsGmail(document.all[0].outerHTML), pageLang: lang, method: 'getEmailsGmail' });
+                    sendResponse({ data: searchContactsGmail(document.all[0].outerHTML, request.domain), pageLang: lang, method: 'getEmailsGmail' });
                 } else
                     if (request.method == 'getInnerHTML') {
                         sendResponse({ data: document.all[0].innerHTML, method: 'getInnerHTML' });
@@ -273,6 +278,6 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
                             sendResponse({ data: document.all[0].innerText, method: 'getInnerText' });
                         } else
                             if (request.method == 'extractEmails') {
-                                sendResponse({ data: searchEmails(request.data, request.domain), method: 'extractEmails' });
+                                sendResponse({ data: searchEmails(request.data, request.domain, request.method), method: 'extractEmails' });
                             }
 });

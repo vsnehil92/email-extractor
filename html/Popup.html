@@ -48,7 +48,16 @@
               <label id="allEmailsLabel" style="font-size: 9pt">Emails from all pages:</label>
               <img id="cleanAllEmails" style="cursor: pointer;" src="../img/del.png">
             </div>
-            <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt"></textarea>
+           <!--  <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt"></textarea> -->
+            <div class="tabledata">
+              <table id="allEmails">
+                <tr>
+                  <td>Email</td>
+                  <td>Domain</td>
+                  <td>Source</td>
+                </tr>
+              </table>
+            </div> 
 
             <label class="switch" style="display: none;">
               <input type="checkbox" checked="true" id="autosearch" hidden="true">

@@ -23,14 +23,16 @@ function showEmails(data) {
       }
 
       if (emailsOld.length > 0) {
-
+        count = 0;
         for (var iNo = 0; iNo < emailsOld.length; iNo++) {
           var email = emailsOld[iNo].toLowerCase().trim();
 
           if ((email !== '') && (emails.indexOf(email) < 0)) {
+            count += 1;
             emails.push(email);
           }
         }
+        console.log(count);
       }
 
       document.getElementById('pageEmails').value = emails.join('\n');
@@ -42,9 +44,40 @@ function showEmails(data) {
     }
   }
 
-  if ((!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false')) && (localStorage['collectedEmails'])) {
-    document.getElementById('allEmails').value = localStorage['collectedEmails'];
+  localStorageToJson = function(email) {
+    data1 = email.split('\n');
+    data1 = '[' + data1.join(',') + ']';
+    let final = JSON.parse(data1);
+    convertToTable(final);
+  }
 
+  convertToTable = function(jsondata) {
+    let tableData = document.getElementById('allEmails')
+    for(i=0; i<jsondata.length; i++) {
+      var tr = document.createElement('tr');   
+
+      var td1 = document.createElement('td');
+      var td2 = document.createElement('td');
+      var td3 = document.createElement('td');
+
+      var email = document.createTextNode(jsondata[i].email);
+      var domain = document.createTextNode(jsondata[i].domain);
+      var source = document.createTextNode(jsondata[i].source);
+
+      td1.appendChild(email);
+      td2.appendChild(domain);
+      td3.appendChild(source);
+
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      tr.appendChild(td3);
+
+      tableData.appendChild(tr);
+    }
+  }
+
+  if ((!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false')) && (localStorage['collectedEmails'])) {
+    localStorageToJson(localStorage['collectedEmails']);
     document.getElementById('allEmailsLabel').style.display = 'inline';
     document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages') + ' (' + localStorage['collectedEmails'].split('\n').length + '):';
     document.getElementById('cleanAllEmails').style.display = 'inline-block';
@@ -56,7 +89,7 @@ function showEmails(data) {
     hide(document.getElementById('pageEmails'));
     hide(document.getElementById('pageEmailsLabel'));
     if (localStorage['collectedEmails'] != undefined || localStorage['collectedEmails'] != null) {
-      document.getElementById('allEmails').value = localStorage['collectedEmails'];
+      localStorageToJson(localStorage['collectedEmails']);
       document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
       document.getElementById('btnExportAll').style.display = 'inline-block';
       document.getElementById('butonexpall').style.display = 'inline-block';
@@ -166,15 +199,16 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   });
 
   if (tab.url.indexOf('bing.com') > 0) {
-    console.log('here');
-    chrome.tabs.sendMessage(tab.id, { method: 'getEmailsBing' }, function (response) {
+    let domain = tldjs.getDomain(tab.url);
+    chrome.tabs.sendMessage(tab.id, { method: 'getEmailsBing', domain: domain }, function (response) {
       if (response) {
         showEmails(response.data);
       } else showEmails();
     });
 
   } else {
-    chrome.tabs.sendMessage(tab.id, { method: 'getEmails' }, function (response) {
+    let domain = tldjs.getDomain(tab.url);
+    chrome.tabs.sendMessage(tab.id, { method: 'getEmails', domain: domain }, function (response) {
       if (response) {
         showEmails(response.data);
       } else {
@@ -193,7 +227,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   }
 
   document.getElementById('cleanAllEmails').addEventListener('click', function () {
-    document.getElementById('allEmails').value = '';
+    let table = document.getElementById('allEmails');
+    table.innerHTML = "";
     localStorage['collectedEmails'] = '';
   });
 
