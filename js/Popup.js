@@ -3,7 +3,6 @@ function showEmails(data) {
     var data = new Blob([text], { type: 'text/csv' });
 
     if (txtFile !== null) {
-      console.log(txtFile);
       window.URL.revokeObjectURL(txtFile);
     }
 
@@ -65,22 +64,6 @@ function showEmails(data) {
   }
 }
 
-/* function displayChange(value) {
-  if(value == 'spider') {
-    hide(document.getElementById('automation'));
-    hide(document.getElementById('search'));
-    show(document.getElementById('email-spider'));
-  } else if(value == 'automate') {
-    hide(document.getElementById('email-spider'));
-    hide(document.getElementById('search'));
-    show(document.getElementById('automation'));
-  } else if (value == 'search') {
-    hide(document.getElementById('email-spider'));
-    hide(document.getElementById('automation'));
-    show(document.getElementById('search'));
-  }
-} */
-
 function localizeHtml() {
   document.getElementById('pageEmailsLabel').innerText = chrome.i18n.getMessage('pageEmails') + ':';
 
@@ -129,7 +112,7 @@ function searchEmailsInBing(domain, tabId, secondPage) {
       parseSearchEmailsInBing(xhr.responseText, url, domain, tabId);
       if (!secondPage && xhr.responseText.indexOf('"b_pag"') > 0) {
         setTimeout(searchEmailsInBing, 1000, domain, tabId, true);
-        // searchEmailsInBing(domain, tabId, true);
+        searchEmailsInBing(domain, tabId, true);
       }
     }
   };
@@ -182,7 +165,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
   });
 
-  if (tldjs.getDomain(tab.url) == 'bing.com') {
+  if (tab.url.indexOf('bing.com') > 0) {
+    console.log('here');
     chrome.tabs.sendMessage(tab.id, { method: 'getEmailsBing' }, function (response) {
       if (response) {
         showEmails(response.data);
@@ -197,11 +181,13 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
         showEmails();
       }
 
-      if (!localStorage['disableAutosearch'] || (localStorage['disableAutosearch'] == 'false')) {
+      // this will be executed when we want to search email from google
+/*       if (1 === 'true') {
         if (tab.url.indexOf('google') == -1) {
+          console.log('here');
           searchEmailsInBing(tldjs.getDomain(tab.url), tab.id);
         }
-      }
+      } */
 
     });
   }
