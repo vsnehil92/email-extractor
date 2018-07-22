@@ -14,7 +14,7 @@ function showEmails(data) {
     emails = data.slice();
     var textFile = null;
     var textFile2 = null;
-
+    console.log(emails);
     if ((emails) && (emails.length > 0)) {
       var emailsOld = [];
       emailsOld = document.getElementById('pageEmails').value.split('\n');
@@ -28,7 +28,6 @@ function showEmails(data) {
           var email = emailsOld[iNo].toLowerCase().trim();
 
           if ((email !== '') && (emails.indexOf(email) < 0)) {
-            count += 1;
             emails.push(email);
           }
         }
