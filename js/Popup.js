@@ -11,27 +11,24 @@ function showEmails(data) {
   };
 
   if (data && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
-    emails = data.slice();
+    var initial_data = data;
+    var emails = [];
     var textFile = null;
     var textFile2 = null;
-    console.log(emails);
-    if ((emails) && (emails.length > 0)) {
+    if ((initial_data) && (initial_data.length > 0)) {
       var emailsOld = [];
       emailsOld = document.getElementById('pageEmails').value.split('\n');
-      if ((emailsOld.length == 1) && (emailsOld[0].trim() == '')) {
-        emailsOld.splice(0, 1);
-      }
-
+      console.log(emails.length)
       if (emailsOld.length > 0) {
         count = 0;
-        for (var iNo = 0; iNo < emailsOld.length; iNo++) {
-          var email = emailsOld[iNo].toLowerCase().trim();
-
-          if ((email !== '') && (emails.indexOf(email) < 0)) {
+        for (var iNo = 0; iNo < initial_data.length; iNo++) {
+          var email = initial_data[iNo];
+          console.log(emails.indexOf(email));
+          if ((email !== '') && (emails.indexOf(email) == -1)) {
             emails.push(email);
+            count += 1;
           }
         }
-        console.log(count);
       }
 
       document.getElementById('pageEmails').value = emails.join('\n');
@@ -43,11 +40,13 @@ function showEmails(data) {
     }
   }
 
-  localStorageToJson = function(email) {
+  localStorageToJson = function(email, table) {
     data1 = email.split('\n');
     data1 = '[' + data1.join(',') + ']';
     let final = JSON.parse(data1);
-    convertToTable(final);
+    if(table) {
+      convertToTable(final);
+    }
   }
 
   convertToTable = function(jsondata) {
@@ -76,7 +75,7 @@ function showEmails(data) {
   }
 
   if ((!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false')) && (localStorage['collectedEmails'])) {
-    localStorageToJson(localStorage['collectedEmails']);
+    localStorageToJson(localStorage['collectedEmails'], 'table');
     document.getElementById('allEmailsLabel').style.display = 'inline';
     document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages') + ' (' + localStorage['collectedEmails'].split('\n').length + '):';
     document.getElementById('cleanAllEmails').style.display = 'inline-block';
