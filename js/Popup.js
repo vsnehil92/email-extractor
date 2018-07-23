@@ -165,6 +165,29 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
   });
 
+  document.getElementById('autocrawlurl').addEventListener('click', function () {
+    let urls = document.getElementById("listurl").value;
+    urls = urls.split(",");
+    for(let i =0; i < urls.length; i++){
+      var urlObj = {
+        url:urls[i],
+        active: false
+      }
+      chrome.tabs.create(urlObj, function (data) {
+        urlObj.tabId = data.id;
+        urlObj.windowId = data.windowId;
+        if(!localStorage['automatedCrawls'] || localStorage['automatedCrawls'].length == 0){
+          localStorage['automatedCrawls'] = JSON.stringify([urlObj]);
+        } else {
+          let tempStorage = JSON.parse(localStorage['automatedCrawls']);
+          let tempData = [];
+          tempData = tempStorage.concat([urlObj])
+          localStorage['automatedCrawls'] = JSON.stringify(tempData);
+        }
+      })
+    }
+  });
+
   if (tab.url.indexOf('bing.com') > 0) {
     console.log('here');
     chrome.tabs.sendMessage(tab.id, { method: 'getEmailsBing' }, function (response) {
