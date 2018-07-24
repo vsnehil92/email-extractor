@@ -184,7 +184,8 @@ function parseSendEmails(response, emails, url) {
 
 chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
     function sendMes(methodName) {
-        chrome.tabs.sendMessage(tabId, { method: methodName }, function (response) {
+        let domain = tldjs.getDomain(tab.url);
+        chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
             if ((response) && (response.data)) {
                 tabId_ = tabId;
                 showEmails(response.data);
@@ -206,7 +207,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
         var timeout = 0;
         if ((tab.url.indexOf('google.') > 0) && (tab.url.indexOf('mail.') > 0) && (tab.url.indexOf('#inbox') > 0)) {
             methodName = 'getEmailsGmail';
-            chrome.tabs.sendMessage(tabId, { method: methodName }, function (response) {
+            let domain = tldjs.getDomain(tab.url);
+            chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
                 if (response && response.data && (response.data.length > 0)) {
                     tabId_ = tabId;
                     checkPreviouslySentGmail(response.data, 'https://mail.google.com/', response.pageLang);

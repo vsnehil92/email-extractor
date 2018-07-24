@@ -22,6 +22,12 @@ hr {
     /*border-style: inset;*/
     border-width: 1px;
 }
+table {
+height: 100px;
+}
+.tabledata {
+    overflow-y: scroll;
+}
 
 .nav>li {
     display: inline-block;
