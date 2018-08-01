@@ -30,9 +30,9 @@ chrome.runtime.onStartup.addListener(function (details) {
     });
 });
 
-function saveCollectedEmails(emails) {
+function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
     if (emails && (emails.length > 0)) {
-        if (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false')) {
+        if (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false') || automatedCrawlsFlag) {
             var collectedEmails = [];
             if (localStorage['collectedEmails']) {
                 collectedEmails = localStorage['collectedEmails'].split('\n');
@@ -188,16 +188,43 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
         chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
             if ((response) && (response.data)) {
                 tabId_ = tabId;
-                showEmails(response.data);
+                var initial_data = response.data;;
+                var emails = [];
+                if ((initial_data) && (initial_data.length > 0)) {
+                    count = 0;
+                    for (var iNo = 0; iNo < initial_data.length; iNo++) {
+                        var email = initial_data[iNo];
+                        console.log(emails.indexOf(email));
+                        if ((email !== '') && (emails.indexOf(email) == -1)) {
+                            emails.push(email);
+                            console.log('here')
+                            count += 1;
+                        }
+                }
+                console.log(emails);
+                showEmails(emails);
 
                 if (!((localStorage['disableCollect'] && localStorage['disableCollect'] == 'true'))) {
                     saveCollectedEmails(response.data);
+                }
+
+                if(localStorage['automatedCrawls'] && localStorage['automatedCrawls'].length > 0){
+                  if(tab.status == "complete"){
+                    let urlObjs = JSON.parse(localStorage['automatedCrawls']);
+                    for(let i = 0; i<urlObjs.length; i++){
+                      if(urlObjs[i].tabId == tabId && urlObjs[i].windowId == tab.windowId){
+                        saveCollectedEmails(response.data, true);
+                        chrome.tabs.remove(tabId)
+                      }
+                    }
+                  }
                 }
 
                 if (response.data && (response.data.length > 0) && (response.data.length < 200)) {
                     checkPreviouslySent(response.data, tab.url);
                 }
             }
+        }
         });
 
     }

@@ -22,11 +22,33 @@ hr {
     /*border-style: inset;*/
     border-width: 1px;
 }
+
 table {
-height: 100px;
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
 }
-.tabledata {
+
+thead {
+    font-weight: bold;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+#div1 {
     overflow-y: scroll;
+    overflow-x: scroll;
+    height: 300px;
+}
+
+#div2 {
+    overflow-y: scroll;
+    overflow-x: scroll;
+    height: 300px;
 }
 
 .nav>li {
@@ -35,4 +57,15 @@ height: 100px;
 
 .nav {
     padding-left: 7%;
+}
+
+#tablesearch {
+    background-image: url('./searchicon.png'); 
+    background-position: 10px 12px; 
+    background-repeat: no-repeat; 
+    width: 90%; 
+    font-size: 16px; 
+    padding: 12px 20px 12px 40px; 
+    border: 1px solid #ddd; 
+    margin-bottom: 12px;
 }

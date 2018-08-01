@@ -40,22 +40,27 @@
             <img id="bingAnimate" id="address-books" style="cursor: pointer; display:none;" src="../img/refresh.png" />
             <hr>
           </div>
-
           <div>
-            <label id="pageEmailsLabel" style="display: inline; font-size: 9pt">email on this page:</label>
-            <textarea type="text" class="form-control" id="pageEmails" rows="8" style="font-size: 9pt"></textarea>
+              <button class="btn" id='saveToLocalStorage' >
+                  <a download="CurrentPageList.csv" id="saveEmailToLocalStorage" style=" font-size: 9pt;">Save current email(0)</a>
+              </button>
+          </div>
+          <div>
             <div style="white-space: nowrap">
               <label id="allEmailsLabel" style="font-size: 9pt">Emails from all pages:</label>
               <img id="cleanAllEmails" style="cursor: pointer;" src="../img/del.png">
             </div>
-           <!--  <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt"></textarea> -->
-            <div class="tabledata">
+            <!--  <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt"></textarea> -->
+            <input type="text" id="tablesearch"  placeholder="Search for email">
+            <hr>
+            <div id="div2">
               <table id="allEmails">
-                <tr>
-                  <td>Email</td>
-                  <td>Domain</td>
-                  <td>Source</td>
-                </tr>
+                <thead>
+                  <tr>
+                    <td>Email</td>
+                    <td>Domain</td>
+                  </tr>
+                </thead>
               </table>
             </div> 
 
@@ -84,7 +89,10 @@
         <button class="btn" id="autocrawlurl">Let's Go</button>
       </div>
       <div id="search" class="tab-pane fade ex-wrap">
-        <h1>email search</h1>
+        <input class="form-control" type="text" placeholder="First Name"> <br />
+        <input class="form-control" type="text" placeholder="Last Name"> <br />
+        <input class="form-control" type="text" placeholder="Compnay Domain"><br/>
+        <button class="btn">Search</button>
       </div>
     </div>
   </div>
