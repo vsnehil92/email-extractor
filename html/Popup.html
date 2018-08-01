@@ -31,9 +31,6 @@
       <div id="email-spider" class="tab-pane fade ex-wrap active in">
         <form>
           <div>
-              <button class="btn" id='saveToLocalStorage' >
-                  <a download="CurrentPageList.csv" id="saveEmailToLocalStorage" style=" font-size: 9pt;">save current email</a>
-              </button>
             <label class="switch">
               <input type="checkbox" checked="true" id="collectEmails">
               <div class="slider round"></div>
@@ -43,20 +40,12 @@
             <img id="bingAnimate" id="address-books" style="cursor: pointer; display:none;" src="../img/refresh.png" />
             <hr>
           </div>
-
           <div>
-            <label id="pageEmailsLabel" style="display: inline; font-size: 9pt">email on this page:</label>
-            <div id="div1">
-              <table id="pageEmails">
-                <thead>
-                  <tr>
-                    <td>Email</td>
-                    <td>Domain</td>
-                    <td>Source</td>
-                  </tr>
-                </thead>
-              </table>
-            </div> 
+              <button class="btn" id='saveToLocalStorage' >
+                  <a download="CurrentPageList.csv" id="saveEmailToLocalStorage" style=" font-size: 9pt;">Save current email(0)</a>
+              </button>
+          </div>
+          <div>
             <div style="white-space: nowrap">
               <label id="allEmailsLabel" style="font-size: 9pt">Emails from all pages:</label>
               <img id="cleanAllEmails" style="cursor: pointer;" src="../img/del.png">
@@ -70,7 +59,6 @@
                   <tr>
                     <td>Email</td>
                     <td>Domain</td>
-                    <td>Source</td>
                   </tr>
                 </thead>
               </table>
@@ -101,7 +89,10 @@
         <button class="btn" id="autocrawlurl">Let's Go</button>
       </div>
       <div id="search" class="tab-pane fade ex-wrap">
-        <h1>email search</h1>
+        <input class="form-control" type="text" placeholder="First Name"> <br />
+        <input class="form-control" type="text" placeholder="Last Name"> <br />
+        <input class="form-control" type="text" placeholder="Compnay Domain"><br/>
+        <button class="btn">Search</button>
       </div>
     </div>
   </div>
