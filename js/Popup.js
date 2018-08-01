@@ -1,4 +1,29 @@
+
+var tempEmail = undefined;
+
+function saveCollectedEmails(emails) {
+  if (emails && (emails.length > 0)) {
+    if (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false') ) {
+      var collectedEmails = [];
+      if (localStorage['collectedEmails']) {
+        collectedEmails = localStorage['collectedEmails'].split('\n');
+      }
+
+      for (var iNo = 0; iNo < emails.length; iNo++) {
+        var email = emails[iNo];
+        if (collectedEmails.indexOf(email) < 0) {
+          collectedEmails.push(email);
+        }
+      }
+
+      localStorage['collectedEmails'] = collectedEmails.join('\n');
+    }
+  }
+}
+
 function showEmails(data) {
+  console.log("hit")
+  console.log("data: ", data);
   makeTextFile = function (text, txtFile) {
     var data = new Blob([text], { type: 'text/csv' });
 
@@ -62,18 +87,19 @@ function showEmails(data) {
       count = 0;
       for (var iNo = 0; iNo < initial_data.length; iNo++) {
         var email = initial_data[iNo];
-        console.log(emails.indexOf(email));
         if ((email !== '') && (emails.indexOf(email) == -1)) {
           emails.push(email);
           count += 1;
         }
       }
-
+      console.log("email: ", emails)
+      tempEmail = emails;
       localStorageToJson(emails, 'pageEmails');
       document.getElementById('btnExport').href = makeTextFile(emails.join('\r\n'), textFile);
       document.getElementById('btnExport').style.display = 'inline-block';
       document.getElementById('butonexp').style.display = 'inline-block';
       document.getElementById('pageEmailsLabel').innerText = chrome.i18n.getMessage('pageEmails') + ' (' + emails.length + '):';
+
     }
   }
 
@@ -205,27 +231,38 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
   });
 
+  document.getElementById('saveToLocalStorage').addEventListener('click', function () {
+    saveCollectedEmails(tempEmail);
+  });
+
   document.getElementById('autocrawlurl').addEventListener('click', function () {
     let urls = document.getElementById("listurl").value;
-    urls = urls.split(",");
-    for(let i =0; i < urls.length; i++){
-      var urlObj = {
-        url:urls[i],
-        active: false
-      }
-      chrome.tabs.create(urlObj, function (data) {
-        urlObj.tabId = data.id;
-        urlObj.windowId = data.windowId;
-        if(!localStorage['automatedCrawls'] || localStorage['automatedCrawls'].length == 0){
-          localStorage['automatedCrawls'] = JSON.stringify([urlObj]);
-        } else {
-          let tempStorage = JSON.parse(localStorage['automatedCrawls']);
-          let tempData = [];
-          tempData = tempStorage.concat([urlObj])
-          localStorage['automatedCrawls'] = JSON.stringify(tempData);
-        }
-      })
+    let tabData = [];
+    urls = urls.split("\n");
+    let tabObj = {
+      url: urls
     }
+
+
+    chrome.windows.create(tabObj, function (data) {
+      for(var i=0;i<data.tabs.length;i++){
+        var urlObj = {};
+        urlObj.tabId = data.tabs[i].id;
+        urlObj.url = data.tabs[i].url;
+        urlObj.windowId = data.tabs[i].windowId;
+        tabData.push(urlObj);
+      }
+
+      if(!localStorage['automatedCrawls'] || localStorage['automatedCrawls'].length == 0){
+        localStorage['automatedCrawls'] = JSON.stringify(tabData);
+      } else {
+        let tempStorage = JSON.parse(localStorage['automatedCrawls']);
+        let tempData = [];
+        tempData = tempStorage.concat(tabData)
+        localStorage['automatedCrawls'] = JSON.stringify(tempData);
+      }
+    })
+
   });
 
   if (tab.url.indexOf('bing.com') > 0) {
@@ -240,8 +277,10 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     let domain = tldjs.getDomain(tab.url);
     chrome.tabs.sendMessage(tab.id, { method: 'getEmails', domain: domain }, function (response) {
       if (response) {
+        console.log("hit0");
         showEmails(response.data);
       } else {
+        console.log("hit1")
         showEmails();
       }
 
