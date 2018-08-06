@@ -178,7 +178,7 @@ function search() {
   
 }
 
-function searchEmailsInBing(domain, tabId, secondPage) {
+/* function searchEmailsInBing(domain, tabId, secondPage) {
   show(document.getElementById('bingAnimate'));
   document.getElementById('bingAnimate').className = "icon-refresh-animate";
   if (secondPage) {
@@ -201,7 +201,7 @@ function searchEmailsInBing(domain, tabId, secondPage) {
     }
   };
   xhr.send();
-}
+} */
 
 
 chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
@@ -260,7 +260,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       url: urls
     }
 
-
     chrome.windows.create(tabObj, function (data) {
       for(var i=0;i<data.tabs.length;i++){
         var urlObj = {};
@@ -318,6 +317,28 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     localStorage['collectedEmails'] = '';
   });
 
+});
+
+document.getElementById('mail_search').addEventListener('click', function () {
+  let fname = document.getElementById("fname").value;
+  let lname = document.getElementById("lname").value;
+  let cdomain = document.getElementById("cdomain").value;
+  let url = 'https://www.google.com/search?q="'+fname+'+'+lname+'"+"%40'+cdomain+'"&oq="'+fname+'+'+lname+'"+"%40'+cdomain+'"';
+  let tabObj = {
+    url: url
+  }
+
+  chrome.windows.create(tabObj, function (data) {
+    chrome.tabs.sendMessage(tab.id, { method: 'normalSearch', domain: domain }, function (response) {
+      if (response) {
+        showEmails(response.data);
+      } else {
+        console.log("hit1")
+        showEmails();
+      }
+    });
+  });
+    
 });
 
 document.addEventListener('DOMContentLoaded', function () {
