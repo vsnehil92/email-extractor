@@ -24,33 +24,23 @@ function showEmails(data) {
     let final = JSON.parse(data1);
     console.log(final);
     if (table) {
-      convertToTable(final, table);
+      convertToTextArea(final, table);
     }
   }
 
-  convertToTable = function (jsondata, table) {
-    let tableData = document.getElementById(table)
+  convertToTextArea = function (jsondata, table) {
+    let dataDiv = document.getElementById('div1');
+    let txtArea = document.createElement('textarea');
+    txtArea.setAttribute('id','scrapedEmails');
+    txtArea.rows = "13";
+    txtArea.cols = "50";
+    
     for (i = 0; i < jsondata.length; i++) {
-      var tr = document.createElement('tr');
-
-      var td1 = document.createElement('td');
-      var td2 = document.createElement('td');
-      var td3 = document.createElement('td');
-
-      var email = document.createTextNode(jsondata[i].email);
-      var domain = document.createTextNode(jsondata[i].domain);
-      var source = document.createTextNode(jsondata[i].source);
-
-      td1.appendChild(email);
-      td2.appendChild(domain);
-      td3.appendChild(source);
-
-      tr.appendChild(td1);
-      tr.appendChild(td2);
-      tr.appendChild(td3);
-
-      tableData.appendChild(tr);
+      txtArea.value += jsondata[i].email+' '+'\n'
     }
+    dataDiv.appendChild(txtArea);
+    console.log(dataDiv);
+
   }
 
   if (data && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
