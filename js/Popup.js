@@ -23,23 +23,20 @@ function showEmails(data) {
     }
     let final = JSON.parse(data1);
     console.log(final);
+    console.log(table);
     if (table) {
-      convertToTextArea(final, table);
+      populateAllEmails(final, table);
     }
   }
 
-  convertToTextArea = function (jsondata, table) {
-    let dataDiv = document.getElementById('div1');
-    let txtArea = document.createElement('textarea');
-    txtArea.setAttribute('id','scrapedEmails');
-    txtArea.rows = "13";
-    txtArea.cols = "50";
+
+  //This function populates the cumuilative emails scraped from all tabs
+  populateAllEmails = function (jsondata, table) {
+    let txtArea = document.getElementById('allEmails');
     
     for (i = 0; i < jsondata.length; i++) {
       txtArea.value += jsondata[i].email+' '+'\n'
     }
-    dataDiv.appendChild(txtArea);
-    console.log(dataDiv);
 
   }
 
@@ -72,7 +69,7 @@ function showEmails(data) {
     document.getElementById('allEmailsLabel').style.display = 'inline';
     document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages') + ' (' + localStorage['collectedEmails'].split('\n').length + '):';
     document.getElementById('cleanAllEmails').style.display = 'inline-block';
-    document.getElementById('allEmails').style.display = 'inline-block';
+    //document.getElementById('allEmails').style.display = 'inline-block';
     document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
     document.getElementById('btnExportAll').style.display = 'inline-block';
     document.getElementById('butonexpall').style.display = 'inline-block';
@@ -254,31 +251,31 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
 });
 
-document.getElementById('tablesearch').addEventListener('onkeyup', function () {
-  var input, filter, table, tr, td, i;
-  input = document.getElementById("tablesearch");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("allEmails");
-  tr = table.getElementsByTagName("tr");
+// document.getElementById('tablesearch').addEventListener('onkeyup', function () {
+//   var input, filter, table, tr, td, i;
+//   input = document.getElementById("tablesearch");
+//   filter = input.value.toUpperCase();
+//   table = document.getElementById("allEmails");
+//   tr = table.getElementsByTagName("tr");
 
-  // Loop through all table rows, and hide those who don't match the search query
-  for (i = 0; i < tr.length; i++) {
-    td0 = tr[i].getElementsByTagName("td")[0];
-    td1 = tr[i].getElementsByTagName("td")[1];
-    td2 = tr[i].getElementsByTagName("td")[2];
-    if (td0 || td1 || td2) {
-      if (td0.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }
-  }
-})
+//   // Loop through all table rows, and hide those who don't match the search query
+//   for (i = 0; i < tr.length; i++) {
+//     td0 = tr[i].getElementsByTagName("td")[0];
+//     td1 = tr[i].getElementsByTagName("td")[1];
+//     td2 = tr[i].getElementsByTagName("td")[2];
+//     if (td0 || td1 || td2) {
+//       if (td0.innerHTML.toUpperCase().indexOf(filter) > -1) {
+//         tr[i].style.display = "";
+//       } else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+//         tr[i].style.display = "";
+//       } else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+//         tr[i].style.display = "";
+//       } else {
+//         tr[i].style.display = "none";
+//       }
+//     }
+//   }
+// })
 
 document.addEventListener('DOMContentLoaded', function () {
   //
