@@ -32,7 +32,7 @@ function showEmails(data) {
 
   //This function populates the cumuilative emails scraped from all tabs
   populateAllEmails = function (jsondata, table) {
-    let txtArea = document.getElementById('allEmails');
+    let txtArea = document.getElementById(table)
     
     for (i = 0; i < jsondata.length; i++) {
       txtArea.value += jsondata[i].email+' '+'\n'
