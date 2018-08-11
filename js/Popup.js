@@ -327,9 +327,10 @@ document.getElementById('mail_search').addEventListener('click', function () {
   let tabObj = {
     url: url
   }
-
+  let domain = tldjs.getDomain(tab.url);
+  domains = {fname: fname, lname: lname, cdomain: cdomain, domain: domain}
   chrome.windows.create(tabObj, function (data) {
-    chrome.tabs.sendMessage(tab.id, { method: 'normalSearch', domain: domain }, function (response) {
+    chrome.tabs.sendMessage(tab.id, { method: 'normalSearch', domain: domains }, function (response) {
       if (response) {
         showEmails(response.data);
       } else {

@@ -104,6 +104,10 @@ function searchEmails(pageText, domain, method) {
     }
 }
 
+function normalSearch(pageText, domain, method) {
+
+}
+
 function convertHtmlToText(inputText) {
     var returnText = inputText;
     if (returnText) {
@@ -279,5 +283,8 @@ chrome.extension.onMessage.addListener(function (request, sender, sendResponse) 
                         } else
                             if (request.method == 'extractEmails') {
                                 sendResponse({ data: searchEmails(request.data, request.domain, request.method), method: 'extractEmails' });
-                            }
+                            } else
+                                if (request.method == 'normalSearch') {
+                                    sendResponse({ data: normalSearch(request.data, request.domain, request.method), method: 'extractEmails' });
+                                }
 });
