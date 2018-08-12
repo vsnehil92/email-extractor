@@ -15,7 +15,7 @@ var invalidLocalParts = ['the', '2', '3', '4', '123', '20info', 'aaa', 'ab', 'ab
     'name', 'need', 'nfo', 'ninfo', 'now', 'o', 'online', 'post', 'rcom.TripResearch.userreview.UserReviewDisplayInfo', 's', 'sales2', 'test', 'up', 'we', 'www', 'xxx', 'xxxxx', 
     'y', 'username', 'firstname.lastname'];
 
-function prepareEmails(emails, domain, method) {
+function prepareEmails(emails, domain, method, fname, lname, cdomain) {
     var emailsNew = [];
     for (var iNo = 0; iNo < emails.length; iNo++) {
         var email = emails[iNo].toLowerCase().trim();
@@ -84,11 +84,23 @@ function prepareEmails(emails, domain, method) {
             };
 
             if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
-                let split = email.split('@');
-                let dom = split[1];
-                let newEmail = {email: email, domain: dom, source: domain};
-                newEmail = JSON.stringify(newEmail);
-                emailsNew.push(newEmail);
+                console.log(email)
+                if (cname && lname && cdomain) {
+                    console.log(email, fname, lname, cdomain);
+                    if ((email.equalsIgnoreCase(fname) || email.equalsIgnoreCase(lname)) && email.equalsIgnoreCase(cdomain)) {
+                        let split = email.split('@');
+                        let dom = split[1];
+                        let newEmail = {email: email, domain: dom, source: domain};
+                        newEmail = JSON.stringify(newEmail);
+                        emailsNew.push(newEmail);
+                    }
+                } else {
+                    let split = email.split('@');
+                    let dom = split[1];
+                    let newEmail = {email: email, domain: dom, source: domain};
+                    newEmail = JSON.stringify(newEmail);
+                    emailsNew.push(newEmail);
+                }
             }
         }
     }
@@ -100,12 +112,24 @@ function searchEmails(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
     if ((emails !== null) && (emails.length > 0)) {
-        return prepareEmails(emails, domain, method);
+        return prepareEmails(emails, domain, method, fname, lname, cdomain);
     }
 }
 
 function normalSearch(pageText, domain, method) {
-
+    fname = domain.fname;
+    lname = domain.lname;
+    cdomain = domain.cdomain;
+    domain = domain.domain;
+    console.log('here')
+    pageText = pageText.replace(/\\n/ig, ' ');
+    var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
+    if ((emails !== null) && (emails.length > 0)) {
+        finalEmail =  prepareEmails(emails, domain, method);
+        if (finalEmail.length > 0) {
+            return finalEmail;
+        }
+    }
 }
 
 function convertHtmlToText(inputText) {

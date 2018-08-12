@@ -281,6 +281,30 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
 
   });
 
+  document.getElementById('mail_search').addEventListener('click', function () {
+    let fname = document.getElementById("fname").value;
+    let lname = document.getElementById("lname").value;
+    let cdomain = document.getElementById("cdomain").value;
+    console.log('here')
+    let url = 'https://www.google.com/search?q="'+fname+'+'+lname+'"+"%40'+cdomain+'"&oq="'+fname+'+'+lname+'"+"%40'+cdomain+'"';
+    let tabObj = {
+      url: url
+    }
+    let domain = tldjs.getDomain(tab.url);
+    domains = {fname: fname, lname: lname, cdomain: cdomain, domain: domain}
+    chrome.windows.create(tabObj, function (data) {
+      console.log(data);
+      chrome.tabs.sendMessage(tab.id, { method: 'normalSearch', domain: domains }, function (response) {
+        if (response) {
+          console.log(response)
+        } else {
+           console.log('not found')
+        }
+      });
+    });
+      
+  });
+
   if (tab.url.indexOf('bing.com') > 0) {
     let domain = tldjs.getDomain(tab.url);
     chrome.tabs.sendMessage(tab.id, { method: 'getEmailsBing', domain: domain }, function (response) {
@@ -317,29 +341,6 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     localStorage['collectedEmails'] = '';
   });
 
-});
-
-document.getElementById('mail_search').addEventListener('click', function () {
-  let fname = document.getElementById("fname").value;
-  let lname = document.getElementById("lname").value;
-  let cdomain = document.getElementById("cdomain").value;
-  let url = 'https://www.google.com/search?q="'+fname+'+'+lname+'"+"%40'+cdomain+'"&oq="'+fname+'+'+lname+'"+"%40'+cdomain+'"';
-  let tabObj = {
-    url: url
-  }
-  let domain = tldjs.getDomain(tab.url);
-  domains = {fname: fname, lname: lname, cdomain: cdomain, domain: domain}
-  chrome.windows.create(tabObj, function (data) {
-    chrome.tabs.sendMessage(tab.id, { method: 'normalSearch', domain: domains }, function (response) {
-      if (response) {
-        showEmails(response.data);
-      } else {
-        console.log("hit1")
-        showEmails();
-      }
-    });
-  });
-    
 });
 
 document.addEventListener('DOMContentLoaded', function () {
