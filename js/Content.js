@@ -96,7 +96,7 @@ function prepareEmails(emails, domain, method) {
     return emailsNew;
 }
 
-function searchEmails(emails, domain, method, fname, lname, cdomain) {
+function findEmails(emails, domain, method, fname, lname, cdomain) {
     var emailsNew = [];
     for (var iNo = 0; iNo < emails.length; iNo++) {
         var email = emails[iNo].toLowerCase().trim();
@@ -198,7 +198,7 @@ function normalSearch(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
     if ((emails !== null) && (emails.length > 0)) {
-        finalEmail =  searchEmails(emails, domain, method, fname, lname, cdomain);
+        finalEmail =  findEmails(emails, domain, method, fname, lname, cdomain);
         if (finalEmail.length > 0) {
             localStorage['searchedemail'] = finalEmail;
             return finalEmail;
