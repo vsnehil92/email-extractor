@@ -292,9 +292,9 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
     let domain = tldjs.getDomain(tab.url);
     domains = {fname: fname, lname: lname, cdomain: cdomain, domain: domain}
-    chrome.windows.create(tabObj, function (data) {
-      console.log(data);
-      chrome.tabs.sendMessage(tab.id, { method: 'normalSearch', domain: domains }, function (response) {
+    chrome.tabs.create(tabObj, function (data) {
+      console.log(data.id);
+      chrome.tabs.sendMessage(data.id, { method: 'normalSearch', domain: domains }, function (response) {
         if (response) {
           console.log(response)
         } else {

@@ -15,7 +15,7 @@ var invalidLocalParts = ['the', '2', '3', '4', '123', '20info', 'aaa', 'ab', 'ab
     'name', 'need', 'nfo', 'ninfo', 'now', 'o', 'online', 'post', 'rcom.TripResearch.userreview.UserReviewDisplayInfo', 's', 'sales2', 'test', 'up', 'we', 'www', 'xxx', 'xxxxx', 
     'y', 'username', 'firstname.lastname'];
 
-function prepareEmails(emails, domain, method, fname, lname, cdomain) {
+function prepareEmails(emails, domain, method) {
     var emailsNew = [];
     for (var iNo = 0; iNo < emails.length; iNo++) {
         var email = emails[iNo].toLowerCase().trim();
@@ -85,22 +85,96 @@ function prepareEmails(emails, domain, method, fname, lname, cdomain) {
 
             if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
                 console.log(email)
-                if (cname && lname && cdomain) {
-                    console.log(email, fname, lname, cdomain);
-                    if ((email.equalsIgnoreCase(fname) || email.equalsIgnoreCase(lname)) && email.equalsIgnoreCase(cdomain)) {
-                        let split = email.split('@');
-                        let dom = split[1];
-                        let newEmail = {email: email, domain: dom, source: domain};
-                        newEmail = JSON.stringify(newEmail);
-                        emailsNew.push(newEmail);
-                    }
-                } else {
+                let split = email.split('@');
+                let dom = split[1];
+                let newEmail = {email: email, domain: dom, source: domain};
+                newEmail = JSON.stringify(newEmail);
+                emailsNew.push(newEmail);
+            }
+        }
+    }
+
+    return emailsNew;
+}
+
+function searchEmails(emails, domain, method, fname, lname, cdomain) {
+    var emailsNew = [];
+    for (var iNo = 0; iNo < emails.length; iNo++) {
+        var email = emails[iNo].toLowerCase().trim();
+
+        if ((emailsNew.indexOf(email) < 0)) {
+            if (domain && method === 'extractEmails') {
+                alert('here');
+                if (email.indexOf(domain) < 1) {
+                    continue;
+                };
+            }
+
+            var ext = email.slice(-4);
+            if ((ext === '.png') || (ext === '.jpg') || (ext === '.gif') || (ext === '.css') || (ext === '.jpeg')) {
+                continue;
+            }
+            var ext2 = email.slice(-3);
+            if ((ext2 === '.js')) {
+                continue;
+            }
+
+            var newEmail = email.replace(/^(x3|x2|u003)[b|c|d|e]/i, '');
+            newEmail = newEmail.replace(/^sx_mrsp_/i, '');
+            newEmail = newEmail.replace(/^3a/i, '');
+            if (newEmail !== email) {
+                email = newEmail;
+                if (email.search(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/i) == -1) {
+                    continue;
+                }
+            }
+
+            if (email.search(/(no|not)[-|_]*reply/i) != -1) {
+                continue;
+            };
+            if (email.search(/mailer[-|_]*daemon/i) != -1) {
+                continue;
+            };
+            if (email.search(/reply.+\d{5,}/i) != -1) {
+                continue;
+            };
+            if (email.search(/\d{13,}/i) != -1) {
+                continue;
+            };
+            if (email.indexOf('.crx1') > 0) {
+                continue;
+            };
+            if (email.indexOf('nondelivery') > 0) {
+                continue;
+            };
+            if (email.indexOf('@linkedin.com') > 0) {
+                continue;
+            };
+            if (email.indexOf('@linkedhelper.com') > 0) {
+                continue;
+            };
+            if (email.indexOf('feedback') > 0) {
+                continue;
+            };
+            if (email.indexOf('notification') > 0) {
+                continue;
+            };
+
+            var localPart = email.substring(0, email.indexOf('@'));
+            if (invalidLocalParts.indexOf(localPart) !== -1) {
+                continue;
+            };
+
+            if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
+                console.log(email)
+                console.log(email, fname, lname, cdomain);
+                if ((email.equalsIgnoreCase(fname) || email.equalsIgnoreCase(lname)) && email.equalsIgnoreCase(cdomain)) {
                     let split = email.split('@');
                     let dom = split[1];
                     let newEmail = {email: email, domain: dom, source: domain};
                     newEmail = JSON.stringify(newEmail);
                     emailsNew.push(newEmail);
-                }
+                    }
             }
         }
     }
@@ -112,7 +186,7 @@ function searchEmails(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
     if ((emails !== null) && (emails.length > 0)) {
-        return prepareEmails(emails, domain, method, fname, lname, cdomain);
+        return prepareEmails(emails, domain, method);
     }
 }
 
@@ -125,8 +199,9 @@ function normalSearch(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
     if ((emails !== null) && (emails.length > 0)) {
-        finalEmail =  prepareEmails(emails, domain, method);
+        finalEmail =  searchEmails(emails, domain, method, fname, lname, cdomain);
         if (finalEmail.length > 0) {
+            localStorage['searchedemail'] = finalEmail;
             return finalEmail;
         }
     }
