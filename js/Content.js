@@ -84,7 +84,6 @@ function prepareEmails(emails, domain, method) {
             };
 
             if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
-                console.log(email)
                 let split = email.split('@');
                 let dom = split[1];
                 let newEmail = {email: email, domain: dom, source: domain};
