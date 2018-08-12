@@ -290,18 +290,12 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     let tabObj = {
       url: url
     }
-    let domain = tldjs.getDomain(tab.url);
-    domains = {fname: fname, lname: lname, cdomain: cdomain, domain: domain}
+    // create object ans store in local storage
+    let obj = {fname: fname, lname: lname, cdomain: cdomain};
+    obj = JSON.stringify(obj);
+    localStorage.setItem('search', '0');
     chrome.windows.create(tabObj, function (data) {
-      console.log(data.tabs[0].id);
-      chrome.tabs.sendMessage(data.tabs[0].id, { method: 'normalSearch', domain: domains }, function (response) {
-        console.log(response)
-        if (response) {
-          console.log(response)
-        } else {
-           console.log('not found')
-        }
-      });
+      // how will the window closed?
     });
       
   });
