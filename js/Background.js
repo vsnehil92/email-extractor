@@ -55,11 +55,15 @@ function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
                 var email = JSON.parse (emails[iNo]);
                 console.log('emails')
                 console.log(email);
-                if ((email.toLowerCase() == searchData.fname.toLowerCase() || email.toLowerCase() == searchData.lname.toLowerCase()) && email.toLowerCase() == searchData.cdomain.toLowerCase()) {
+                if (((email.email.toLowerCase().indexOf(searchData.fname.toLowerCase()) != -1) || (email.email.toLowerCase().indexOf(searchData.lname.toLowerCase()) != -1) ) && (email.email.toLowerCase().indexOf(searchData.cdomain.toLowerCase()) != -1)) {
+                    console.log('email found');
                     console.log(email);
+                    email = JSON.stringify(email);
                     localStorage.setItem('lastSearched', email)
+                    localStorage['search'] = '0';
                 }
             }
+            localStorage['search'] = '0';
         }
     }
 }
