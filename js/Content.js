@@ -84,15 +84,26 @@ function prepareEmails(emails, domain, method) {
             };
 
             if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
-                let split = email.split('@');
-                let dom = split[1];
-                let newEmail = {email: email, domain: dom, source: domain};
-                newEmail = JSON.stringify(newEmail);
-                emailsNew.push(newEmail);
+                // check local storage
+                console.log(localStorage.getItem('search'))
+                chrome.storage.sync.get(['search'], function(items) {
+                    console.log(items.search)
+                    // getting search value
+                    if (items.search != '0') {
+                        let search = JSON.parse(items.search)
+                    } else {
+                        console.log('here');
+                        let split = email.split('@');
+                        let dom = split[1];
+                        let newEmail = {email: email, domain: dom, source: domain};
+                        newEmail = JSON.stringify(newEmail);
+                        emailsNew.push(newEmail);
+                    }
+                  });
             }
         }
     }
-
+    console.log(emailsNew);
     return emailsNew;
 }
 
