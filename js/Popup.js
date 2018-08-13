@@ -21,6 +21,7 @@ function saveCollectedEmails(emails) {
   }
 }
 
+
 function showEmails(data) {
   console.log("hit")
   console.log("data: ", data);
@@ -35,7 +36,7 @@ function showEmails(data) {
     return txtFile;
   };
 
-  var input = document.getElementById('tablesearch');
+  /* var input = document.getElementById('tablesearch');
   input.addEventListener('input', function (e) {
     var input, filter, table, tr, td, i;
     input = document.getElementById("tablesearch");
@@ -57,7 +58,7 @@ function showEmails(data) {
         }
       } 
     }
-  })
+  }) */
 
   localStorageToJson = function (email, table) {
     var data1;
@@ -71,31 +72,24 @@ function showEmails(data) {
       // data1 = email;
     }
     let final = JSON.parse(data1);
-    // console.log(final);
     if (table) {
-      convertToTable(final, table);
+      populateAllEmails(final, table);
     }
   }
 
-  convertToTable = function (jsondata, table) {
-    let tableData = document.getElementById(table)
+  //This function populates the cumuilative emails scraped from all tabs
+  populateAllEmails = function (jsondata, table) {
+    let txtArea = document.getElementById(table)
+    
     for (i = 0; i < jsondata.length; i++) {
-      var tr = document.createElement('tr');
-
-      var td1 = document.createElement('td');
-      var td2 = document.createElement('td');
-
-      var email = document.createTextNode(jsondata[i].email);
-      var domain = document.createTextNode(jsondata[i].domain);
-
-      td1.appendChild(email);
-      td2.appendChild(domain);
-
-      tr.appendChild(td1);
-      tr.appendChild(td2);
-
-      tableData.appendChild(tr);
+      txtArea.value += jsondata[i].email+' '+'\n'
     }
+
+  }
+  if (localStorage['lastSearched'] != undefined) {
+    console.log(localStorage['lastSearched']);
+    let data = JSON.parse(localStorage['lastSearched']);
+    document.getElementById('currentfound').value = data.email;
   }
 
   if (data && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
@@ -131,7 +125,7 @@ function showEmails(data) {
     document.getElementById('allEmailsLabel').style.display = 'inline';
     document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages') + ' (' + localStorage['collectedEmails'].split('\n').length + '):';
     document.getElementById('cleanAllEmails').style.display = 'inline-block';
-    document.getElementById('allEmails').style.display = 'inline-block';
+    //document.getElementById('allEmails').style.display = 'inline-block';
     document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
     document.getElementById('btnExportAll').style.display = 'inline-block';
     document.getElementById('butonexpall').style.display = 'inline-block';

@@ -46,22 +46,27 @@
               </button>
           </div>
           <div>
+            <!-- <label id="pageEmailsLabel" style="display: inline; font-size: 9pt">email on this page:</label> -->
+            <div id="div1">
+              <!-- <textarea name="" id="pageEmails" cols="30" rows="10"></textarea> -->
+            </div> 
             <div style="white-space: nowrap">
               <label id="allEmailsLabel" style="font-size: 9pt">Emails from all pages:</label>
               <img id="cleanAllEmails" style="cursor: pointer;" src="../img/del.png">
             </div>
             <!--  <textarea type="text" class="form-control" id="allEmails" rows="8" style="font-size: 9pt"></textarea> -->
-            <input type="text" id="tablesearch"  placeholder="Search for email">
+            <!-- <input type="text" id="tablesearch"  placeholder="Search for email"> -->
             <hr>
             <div id="div2">
-              <table id="allEmails">
+              <!-- <table id="allEmails">
                 <thead>
                   <tr>
                     <td>Email</td>
                     <td>Domain</td>
                   </tr>
                 </thead>
-              </table>
+              </table> -->
+              <textarea name="" id="allEmails" cols="47" rows="13"></textarea>
             </div> 
 
             <label class="switch" style="display: none;">
@@ -93,6 +98,10 @@
         <input class="form-control" type="text" placeholder="Last Name" id="lname"> <br />
         <input class="form-control" type="text" placeholder="Compnay Domain" id="cdomain"><br/>
         <button class="btn" id="mail_search">Search</button>
+        <div>
+          <label> currently searched email:</label> <br/>
+          <textarea id="currentfound" cols="30" rows="1"></textarea>
+        </div>
       </div>
     </div>
   </div>
