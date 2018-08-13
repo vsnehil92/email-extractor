@@ -92,7 +92,7 @@ function showEmails(data) {
     document.getElementById('currentfound').value = data.email;
   }
 
-  if (data && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
+  if (data && (!localStorage['showCurrentPageEmail'] || (localStorage['showCurrentPageEmail'] == 'false'))) {
     var initial_data = data;
     var emails = [];
     var textFile = null;
@@ -113,7 +113,7 @@ function showEmails(data) {
       //localStorageToJson(emails, 'pageEmails');
       document.getElementById('btnExport').href = makeTextFile(emails.join('\r\n'), textFile);
       document.getElementById('btnExport').style.display = 'inline-block';
-      document.getElementById('butonexp').style.display = 'inline-block';
+      // document.getElementById('butonexp').style.display = 'inline-block';
       //document.getElementById('pageEmailsLabel').innerText = chrome.i18n.getMessage('pageEmails') + ' (' + emails.length + '):';
 
 
@@ -208,17 +208,31 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     document.getElementById('collectEmails').checked = !(localStorage['disableCollectEmails'] === 'true');
   }
 
+  if (localStorage['showCurrentPageEmail'] !== undefined) {
+    document.getElementById('showEmails').checked = !(localStorage['showCurrentPageEmail'] === 'true');
+  }
+  
   document.getElementById('collectEmails').addEventListener('change', function () {
     localStorage['disableCollectEmails'] = !document.getElementById('collectEmails').checked;
     if (!document.getElementById('collectEmails').checked) {
       document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
       document.getElementById('div1').style.height = 0;
-      hide(document.getElementsById(''));butonexp
       hide(document.getElementsById('butonexpall'));
     } else {
       document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
       document.getElementById('div1').style.height = 300;
-      show(document.getElementsById('butonexp'));
+      show(document.getElementsById('butonexpall'));
+    }
+  });
+  document.getElementById('showEmails').addEventListener('change', function () {
+    localStorage['showCurrentPageEmail'] = !document.getElementById('showEmails').checked;
+    if (!document.getElementById('collectEmails').checked) {
+      document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
+      document.getElementById('div1').style.height = 0;
+      hide(document.getElementsById('butonexp'));
+    } else {
+      document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
+      document.getElementById('div1').style.height = 300;
       show(document.getElementsById('butonexpall'));
     }
   });
