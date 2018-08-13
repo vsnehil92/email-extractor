@@ -88,11 +88,10 @@ function prepareEmails(emails, domain, method) {
                 let dom = split[1];
                 let newEmail = {email: email, domain: dom, source: domain};
                 newEmail = JSON.stringify(newEmail);
-                emailsNew.push(newEmail);
+                emailsNew.push(newEmail);    
             }
         }
     }
-
     return emailsNew;
 }
 

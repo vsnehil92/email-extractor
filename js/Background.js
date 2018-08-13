@@ -9,7 +9,7 @@ chrome.extension.onConnect.addListener(function (port) {
     port.onMessage.addListener(function (msg) {
         if (msg && msg.data && msg.url) {
             saveCollectedEmails(msg.data);
-            checkPreviouslySent(msg.data, msg.url);
+            // checkPreviouslySent(msg.data, msg.url);
         }
         port.postMessage('ok');
     });
@@ -31,21 +31,39 @@ chrome.runtime.onStartup.addListener(function (details) {
 });
 
 function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
+    console.log('here');
     if (emails && (emails.length > 0)) {
-        if (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false') || automatedCrawlsFlag) {
-            var collectedEmails = [];
-            if (localStorage['collectedEmails']) {
-                collectedEmails = localStorage['collectedEmails'].split('\n');
+        if (localStorage['search'] == '0' || localStorage['search'] == undefined) {
+            if (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false') || automatedCrawlsFlag) {
+                var collectedEmails = [];
+                if (localStorage['collectedEmails']) {
+                    collectedEmails = localStorage['collectedEmails'].split('\n');
+                }
+                for (var iNo = 0; iNo < emails.length; iNo++) {
+                    var email = emails[iNo];
+                    if (collectedEmails.indexOf(email) < 0) {
+                        collectedEmails.push(email);
+                    }
+                }
+    
+                localStorage['collectedEmails'] = collectedEmails.join('\n');
             }
-
+        } else {
+            searchData = JSON.parse(localStorage['search'])
+            console.log(searchData);
             for (var iNo = 0; iNo < emails.length; iNo++) {
-                var email = emails[iNo];
-                if (collectedEmails.indexOf(email) < 0) {
-                    collectedEmails.push(email);
+                var email = JSON.parse (emails[iNo]);
+                console.log('emails')
+                console.log(email);
+                if (((email.email.toLowerCase().indexOf(searchData.fname.toLowerCase()) != -1) || (email.email.toLowerCase().indexOf(searchData.lname.toLowerCase()) != -1) ) && (email.email.toLowerCase().indexOf(searchData.cdomain.toLowerCase()) != -1)) {
+                    console.log('email found');
+                    console.log(email);
+                    email = JSON.stringify(email);
+                    localStorage.setItem('lastSearched', email)
+                    localStorage['search'] = '0';
                 }
             }
-
-            localStorage['collectedEmails'] = collectedEmails.join('\n');
+            localStorage['search'] = '0';
         }
     }
 }
@@ -194,14 +212,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
                     count = 0;
                     for (var iNo = 0; iNo < initial_data.length; iNo++) {
                         var email = initial_data[iNo];
-                        console.log(emails.indexOf(email));
                         if ((email !== '') && (emails.indexOf(email) == -1)) {
                             emails.push(email);
-                            console.log('here')
                             count += 1;
                         }
                 }
-                console.log(emails);
                 showEmails(emails);
 
                 if (!((localStorage['disableCollect'] && localStorage['disableCollect'] == 'true'))) {
@@ -221,7 +236,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
                 }
 
                 if (response.data && (response.data.length > 0) && (response.data.length < 200)) {
-                    checkPreviouslySent(response.data, tab.url);
+                    // checkPreviouslySent(response.data, tab.url);
                 }
             }
         }
