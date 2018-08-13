@@ -64,6 +64,8 @@ function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
                 }
             }
             localStorage['search'] = '0';
+            console.log(localStorage['search_tabId'])
+            chrome.tabs.remove(parseInt(localStorage['search_tabId']))
         }
     }
 }

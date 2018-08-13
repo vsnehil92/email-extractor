@@ -289,6 +289,8 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     obj = JSON.stringify(obj);
     localStorage.setItem('search', obj);
     chrome.windows.create(tabObj, function (data) {
+      localStorage.setItem('search_tabId', data.tabs[0].id);
+      console.log(data.tabs)
       // how will the window closed?
     });
       
