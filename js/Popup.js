@@ -293,7 +293,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     // create object ans store in local storage
     let obj = {fname: fname, lname: lname, cdomain: cdomain};
     obj = JSON.stringify(obj);
-    localStorage.setItem('search', '0');
+    localStorage.setItem('search', obj);
     chrome.windows.create(tabObj, function (data) {
       // how will the window closed?
     });
