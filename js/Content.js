@@ -15,12 +15,12 @@ var invalidLocalParts = ['the', '2', '3', '4', '123', '20info', 'aaa', 'ab', 'ab
     'name', 'need', 'nfo', 'ninfo', 'now', 'o', 'online', 'post', 'rcom.TripResearch.userreview.UserReviewDisplayInfo', 's', 'sales2', 'test', 'up', 'we', 'www', 'xxx', 'xxxxx', 
     'y', 'username', 'firstname.lastname'];
 
-function prepareEmails(emails, domain, method) {
-    var emailsNew = [];
+function prepareEmails(emails, domain, method, html=undefined) {
+    var emailsNew = [], tempEmail = [];
     for (var iNo = 0; iNo < emails.length; iNo++) {
         var email = emails[iNo].toLowerCase().trim();
 
-        if ((emailsNew.indexOf(email) < 0)) {
+        if ((tempEmail.indexOf(email) < 0)) {
             if (domain && method === 'extractEmails') {
                 alert('here');
                 if (email.indexOf(domain) < 1) {
@@ -83,12 +83,20 @@ function prepareEmails(emails, domain, method) {
                 continue;
             };
 
-            if ((email !== '') && (emailsNew.indexOf(email) == -1)) {
+            if ((email !== '') && (tempEmail.indexOf(email) == -1)) {
                 let split = email.split('@');
                 let dom = split[1];
                 let newEmail = {email: email, domain: dom, source: domain};
-                newEmail = JSON.stringify(newEmail);
-                emailsNew.push(newEmail);    
+                if(tempEmail.indexOf(email) == -1){
+                    tempEmail.push(email)
+                    let div = undefined;
+                    if(html){
+                        div = extractDiv(html, email)
+                    }
+                    newEmail = {email: email, domain: dom, source: domain, div: div};
+                    newEmail = JSON.stringify(newEmail);
+                    emailsNew.push(newEmail);  
+                }  
             }
         }
     }
@@ -98,15 +106,66 @@ function prepareEmails(emails, domain, method) {
 function searchEmails(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
+    console.log("emails : ", emails)
     if ((emails !== null) && (emails.length > 0)) {
         if (domain.ser == undefined || domain.ser == '0'){
-            return prepareEmails(emails, domain, method);
+            return prepareEmails(emails, domain, method, document.all[0].innerHTML);
         } else if(domain.domain.indexOf('google') != -1){
-            return prepareEmails(emails, domain.domain, method);
+            return prepareEmails(emails, domain.domain, method, document.all[0].innerHTML);
         } else {
-            return prepareEmails(emails, domain.domain, method);
+            return prepareEmails(emails, domain.domain, method, document.all[0].innerHTML);
         }
     }
+}
+
+function extractDiv(html, email){
+    let tempHtml = html;
+    let splitData = tempHtml.split(email)
+    console.log(splitData.length + " " + email)
+    var text = "";
+    let textArr = [];
+    let divStartFlag = false
+    if(splitData.length > 1){
+        for(var i=0; i<splitData.length; i++){
+            let splitDataDivStart = splitData[i].split("<div");
+            // let splitDataDivEnd = undefined;
+            console.log("test")
+            if(splitDataDivStart.length > 1 && !divStartFlag){
+                // let n = 1
+                // while(n = 1){
+                //     let x = 1;
+                //     console.log(x)
+                //     splitDataDivEnd = splitData[i + x].split("</div>")
+                //     if(splitDataDivEnd.length > 1){
+                //         n = i + x;
+                //     } else {
+                //         x++;
+                //     }
+                // }
+                console.log(":::::::: split div length start :::: ", splitDataDivStart.length)
+                text = "<div" + splitDataDivStart[splitDataDivStart.length - 1] + email;
+                divStartFlag = true;
+                // console.log(":::::::: split div length end :::: ", splitDataDivEnd.length)
+                // var text = "<div"+splitDataDivStart[splitDataDivStart.length - 1] + emails[email] + splitDataDivEnd[0] + "</div>"
+                // console.log(text)
+            } else {
+                
+                let splitDataDivEnd = splitData[i].split("</div>");
+                if(splitDataDivEnd.length > 1){
+                    text = text + splitDataDivEnd[0] + "</div>";
+                    divStartFlag = false;
+                    textArr.push(text);
+                    text = "";
+                } else {
+                    text = text + splitDataDivEnd[0] + email;
+                }
+                
+                // i++;
+            }
+        }
+    }
+    return textArr;
+    
 }
 
 function convertHtmlToText(inputText) {
@@ -264,7 +323,10 @@ function searchContactsGmail(source) {
 }
 
 chrome.extension.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log("hit0")
+    console.log(request)
     if (request.method == 'getEmails') {
+        // console.log(document.all[0].innerHTML)
         sendResponse({ data: searchEmails(document.all[0].innerHTML, request.domain), method: 'getEmails' });
     } else
         if (request.method == 'getEmailsBing') {
