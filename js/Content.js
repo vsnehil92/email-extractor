@@ -99,7 +99,13 @@ function searchEmails(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
     if ((emails !== null) && (emails.length > 0)) {
-        return prepareEmails(emails, domain, method);
+        if (domain.ser == undefined || domain.ser == '0'){
+            return prepareEmails(emails, domain, method);
+        } else if(domain.domain.indexOf('google') != -1){
+            return prepareEmails(emails, domain.domain, method);
+        } else {
+            return prepareEmails(emails, domain.domain, method);
+        }
     }
 }
 

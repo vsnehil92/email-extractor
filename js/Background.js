@@ -204,7 +204,14 @@ function parseSendEmails(response, emails, url) {
 
 chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
     function sendMes(methodName) {
-        let domain = tldjs.getDomain(tab.url);
+        let domain
+        if (tab.url.indexOf('mail') == -1 && tab.url.indexOf('google') != -1)
+        {
+            search = localStorage['search']
+            domain = {domain: tldjs.getDomain(tab.url), ser: search};
+        } else {
+           domain = tldjs.getDomain(tab.url);
+        }
         chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
             if ((response) && (response.data)) {
                 tabId_ = tabId;
@@ -247,6 +254,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
     }
 
     if (info && info.status && (info.status.toLowerCase() === 'complete')) {
+        console.log('completed');
         var methodName = 'getEmails';
         var timeout = 0;
         if ((tab.url.indexOf('google.') > 0) && (tab.url.indexOf('mail.') > 0) && (tab.url.indexOf('#inbox') > 0)) {
