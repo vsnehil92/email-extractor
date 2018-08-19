@@ -31,7 +31,7 @@ chrome.runtime.onStartup.addListener(function (details) {
 });
 
 function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
-    console.log('here');
+    // console.log('here');
     if (emails && (emails.length > 0)) {
         if (localStorage['search'] == '0' || localStorage['search'] == undefined) {
             if (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false') || automatedCrawlsFlag) {
@@ -69,6 +69,7 @@ function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
 }
 
 function showEmails(emails, symbol) {
+    console.log("here1")
     if (emails && (emails.length > 0) && (!localStorage['disableCollectEmails'] || (localStorage['disableCollectEmails'] == 'false'))) {
         if (symbol) {
             chrome.browserAction.setBadgeText({ "text": symbol, tabId: tabId_ });
@@ -201,6 +202,7 @@ function parseSendEmails(response, emails, url) {
 } */
 
 chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
+    // console.log("hit")
     function sendMes(methodName) {
         let domain = tldjs.getDomain(tab.url);
         chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
