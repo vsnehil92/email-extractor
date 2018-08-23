@@ -92,14 +92,15 @@ function prepareEmails(emails, domain, method, html=undefined) {
                     let div = undefined;
                     if(html){
                         div = extractDiv(html, email)
+                        newEmail = {email: email, domain: dom, source: domain, div: div};
                     }
-                    newEmail = {email: email, domain: dom, source: domain, div: div};
                     newEmail = JSON.stringify(newEmail);
                     emailsNew.push(newEmail);  
                 }  
             }
         }
     }
+    console.log("emailsNew", emailsNew)
     return emailsNew;
 }
 
@@ -143,8 +144,10 @@ function extractDiv(html, email){
                 //     }
                 // }
                 console.log(":::::::: split div length start :::: ", splitDataDivStart.length)
-                text = "<div" + splitDataDivStart[splitDataDivStart.length - 1] + email;
+                splitDataDivStart[splitDataDivStart.length - 1] = splitDataDivStart[splitDataDivStart.length - 1].replace(/\n/g, "<br />");
+                text = "<div " + splitDataDivStart[splitDataDivStart.length - 1].trim() + email;
                 divStartFlag = true;
+                text = text.trim();
                 // console.log(":::::::: split div length end :::: ", splitDataDivEnd.length)
                 // var text = "<div"+splitDataDivStart[splitDataDivStart.length - 1] + emails[email] + splitDataDivEnd[0] + "</div>"
                 // console.log(text)
@@ -152,12 +155,15 @@ function extractDiv(html, email){
                 
                 let splitDataDivEnd = splitData[i].split("</div>");
                 if(splitDataDivEnd.length > 1){
-                    text = text + splitDataDivEnd[0] + "</div>";
+                    text = text + splitDataDivEnd[0].trim() + "</div>";
                     divStartFlag = false;
+                    text = text.trim();
                     textArr.push(text);
                     text = "";
                 } else {
-                    text = text + splitDataDivEnd[0] + email;
+                    splitDataDivEnd[0] = splitDataDivEnd[0].replace(/\n/g, "<br />");
+                    text = text + splitDataDivEnd[0].trim() + email;
+                    text = text.trim();
                 }
                 
                 // i++;

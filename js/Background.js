@@ -46,7 +46,7 @@ function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
                     }
                 }
     
-                localStorage['collectedEmails'] = collectedEmails.join('\n');
+                localStorage['collectedEmails'] = collectedEmails.join(',');
             }
         } else {
             searchData = JSON.parse(localStorage['search'])

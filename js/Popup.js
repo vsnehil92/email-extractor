@@ -26,11 +26,29 @@ function showEmails(data) {
   console.log("hit")
   console.log("data: ", data);
   makeTextFile = function (text, txtFile) {
-    var data = new Blob([text], { type: 'text/csv' });
+    // var del = text.replace('\n', ',')
+    // text = JSON.stringify(text)
+    text = '[' + text + ']';
+    console.log("txt : ", text)
+    var array = typeof text != 'object' ? JSON.parse(text) : objArray;
+    var str = '';
+    console.log(array)
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
 
-    if (txtFile !== null) {
-      window.URL.revokeObjectURL(txtFile);
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
     }
+    console.log("text : ", str)
+    var data = new Blob([str], { type: 'text/csv' });
+
+    // if (data !== null) {
+    //   window.URL.revokeObjectURL(txtFile);
+    // }
 
     txtFile = window.URL.createObjectURL(data);
     return txtFile;
