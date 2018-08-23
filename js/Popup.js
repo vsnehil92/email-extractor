@@ -230,7 +230,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   }
 
   if (localStorage['showCurrentPageEmail'] !== undefined) {
-    document.getElementById('showEmails').checked = !(localStorage['showCurrentPageEmail'] === 'true');
+    document.getElementById('showEmails').checked = !(localStorage['showCurrentPageEmail'] === 'false');
   }
   
   document.getElementById('collectEmails').addEventListener('change', function () {
@@ -246,15 +246,19 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     }
   });
   document.getElementById('showEmails').addEventListener('change', function () {
-    localStorage['showCurrentPageEmail'] = !document.getElementById('showEmails').checked;
-    if (!document.getElementById('collectEmails').checked) {
-      document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
+    console.log("input flag : ", document.getElementById('showEmails').checked)
+    localStorage['showCurrentPageEmail'] = document.getElementById('showEmails').checked;
+    if (!document.getElementById('showEmails').checked) {
+      // document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
       document.getElementById('div1').style.height = 0;
-      hide(document.getElementsById('butonexp'));
+      hide(document.getElementById('div1'))
+      hide(document.getElementsById('saveToLocalStorage'));
     } else {
-      document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
-      document.getElementById('div1').style.height = 300;
-      show(document.getElementsById('butonexpall'));
+      // document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
+      show(document.getElementById('div1'))
+      document.getElementById('div1').style.height = 90+'px';
+      document.getElementById('div1').style.marginBottom = 3+'em';
+      show(document.getElementsById('saveToLocalStorage'));
     }
   });
 
@@ -265,6 +269,13 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
   } else {
     document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
   }
+
+  if (localStorage['showCurrentPageEmail'] !== 'true') {
+    hide(document.getElementById('div1'))
+    document.getElementById('div1').style.height = 0;
+  } 
+
+
 
   document.getElementById('autosearch').addEventListener('change', function () {
     localStorage['disableAutosearch'] = !document.getElementById('autosearch').checked;
