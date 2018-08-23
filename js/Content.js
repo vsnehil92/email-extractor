@@ -90,7 +90,7 @@ function prepareEmails(emails, domain, method, html=undefined) {
                 if(tempEmail.indexOf(email) == -1){
                     tempEmail.push(email)
                     let div = undefined;
-                    if(html){
+                    if(html && domain != "google.com"){
                         div = extractDiv(html, email)
                         newEmail = {email: email, domain: dom, source: domain, div: div};
                     }

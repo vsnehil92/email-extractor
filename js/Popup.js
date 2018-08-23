@@ -26,7 +26,8 @@ function showEmails(data) {
   console.log("hit")
   console.log("data: ", data);
   makeTextFile = function (text, txtFile) {
-    // var del = text.replace('\n', ',')
+    console.log(text)
+    text = text.replace(/\n/g, ",");
     // text = JSON.stringify(text)
     text = '[' + text + ']';
     console.log("txt : ", text)
@@ -144,13 +145,15 @@ function showEmails(data) {
     document.getElementById('allEmailsLabel').innerText = chrome.i18n.getMessage('emailsFromAllPages') + ' (' + localStorage['collectedEmails'].split('\n').length + '):';
     document.getElementById('cleanAllEmails').style.display = 'inline-block';
     //document.getElementById('allEmails').style.display = 'inline-block';
-    document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
+    // document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
+    document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'], textFile2);
     document.getElementById('btnExportAll').style.display = 'inline-block';
     document.getElementById('butonexpall').style.display = 'inline-block';
   } else {
     if (localStorage['collectedEmails'] != undefined || localStorage['collectedEmails'] != null) {
       localStorageToJson(localStorage['collectedEmails']);
-      document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
+      // document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'].replace(/\n/mg, '\r\n'), textFile2);
+      document.getElementById('btnExportAll').href = makeTextFile(localStorage['collectedEmails'], textFile2);
       document.getElementById('btnExportAll').style.display = 'inline-block';
       document.getElementById('butonexpall').style.display = 'inline-block';
     }
