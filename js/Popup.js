@@ -98,6 +98,9 @@ function showEmails(data) {
 
   //This function populates the cumuilative emails scraped from all tabs
   populateAllEmails = function (jsondata, table) {
+    console.log("--hit--")
+    console.log(jsondata)
+    console.log("-------")
     let txtArea = document.getElementById(table)
     
     for (i = 0; i < jsondata.length; i++) {
@@ -105,13 +108,15 @@ function showEmails(data) {
     }
 
   }
+
   if (localStorage['lastSearched'] != undefined) {
     console.log(localStorage['lastSearched']);
     let data = JSON.parse(localStorage['lastSearched']);
     document.getElementById('currentfound').value = data.email;
   }
 
-  if (data && (!localStorage['showCurrentPageEmail'] || (localStorage['showCurrentPageEmail'] == 'false'))) {
+  
+  if (data && (localStorage['showCurrentPageEmail'] || (localStorage['showCurrentPageEmail'] == 'true'))) {
     var initial_data = data;
     var emails = [];
     var textFile = null;
@@ -129,7 +134,7 @@ function showEmails(data) {
       console.log("email: ", emails)
       tempEmail = emails;
       document.getElementById('saveEmailToLocalStorage').innerText = "Save current email (" + emails.length.toString() + ")"
-      //localStorageToJson(emails, 'pageEmails');
+      localStorageToJson(emails, 'pageEmails');
       document.getElementById('btnExport').href = makeTextFile(emails.join('\r\n'), textFile);
       document.getElementById('btnExport').style.display = 'inline-block';
       // document.getElementById('butonexp').style.display = 'inline-block';
@@ -252,13 +257,13 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       // document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelShort');
       document.getElementById('div1').style.height = 0;
       hide(document.getElementById('div1'))
-      hide(document.getElementsById('saveToLocalStorage'));
+      // hide(document.getElementsById('saveToLocalStorage'));
     } else {
       // document.getElementById('autosearchLabel').innerText = chrome.i18n.getMessage('autosearchLabelLong');
       show(document.getElementById('div1'))
       document.getElementById('div1').style.height = 90+'px';
       document.getElementById('div1').style.marginBottom = 3+'em';
-      show(document.getElementsById('saveToLocalStorage'));
+      // show(document.getElementsById('saveToLocalStorage'));
     }
   });
 
@@ -355,6 +360,7 @@ chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     chrome.tabs.sendMessage(tab.id, { method: 'getEmails', domain: domain }, function (response) {
       if (response) {
         console.log("hit0");
+        console.log(response)
         showEmails(response.data);
       } else {
         console.log("hit1")

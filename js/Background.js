@@ -30,7 +30,7 @@ chrome.runtime.onStartup.addListener(function (details) {
     });
 });
 
-function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
+function saveCollectedEmails(emails, tabid, automatedCrawlsFlag=false) {
     // console.log('here');
     if (emails && (emails.length > 0)) {
         if (localStorage['search'] == '0' || localStorage['search'] == undefined) {
@@ -61,11 +61,22 @@ function saveCollectedEmails(emails, automatedCrawlsFlag=false) {
                     email = JSON.stringify(email);
                     localStorage.setItem('lastSearched', email)
                     localStorage['search'] = '0';
+                    let tabs = localStorage['search_tabId'].split(',');
+                    for(i=0; i<tabs.length; i++) {
+                        chrome.tabs.remove(tabs[i]);
+                    }
+                    localStorage['search_tabId'] = '';
+                } else {
+                    let tabs = localStorage['search_tabId'].split(',');
+                    let index = tabs.indexOf(tabid);
+                    tabs.splice(index, 1);
+                    if(tabs.length <= 0){
+                        localStorage['search'] = '0';
+                    }
+                    localStorage['search_tabId'] = tabs;
+                    chrome.tabs.remove(tabid);
                 }
             }
-            localStorage['search'] = '0';
-            console.log(localStorage['search_tabId'])
-            chrome.tabs.remove(parseInt(localStorage['search_tabId']))
         }
     }
 }
@@ -215,42 +226,67 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
            domain = tldjs.getDomain(tab.url);
         }
         chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
+            console.log("respose");
+            console.log(response.data)
             if ((response) && (response.data)) {
                 tabId_ = tabId;
-                var initial_data = response.data;;
-                var emails = [];
-                if ((initial_data) && (initial_data.length > 0)) {
-                    count = 0;
-                    for (var iNo = 0; iNo < initial_data.length; iNo++) {
-                        var email = initial_data[iNo];
-                        if ((email !== '') && (emails.indexOf(email) == -1)) {
-                            emails.push(email);
-                            count += 1;
-                        }
-                }
-                showEmails(emails);
-
-                if (!((localStorage['disableCollect'] && localStorage['disableCollect'] == 'true'))) {
-                    saveCollectedEmails(response.data);
-                }
-
-                if(localStorage['automatedCrawls'] && localStorage['automatedCrawls'].length > 0){
-                  if(tab.status == "complete"){
-                    let urlObjs = JSON.parse(localStorage['automatedCrawls']);
-                    for(let i = 0; i<urlObjs.length; i++){
-                      if(urlObjs[i].tabId == tabId && urlObjs[i].windowId == tab.windowId){
-                        saveCollectedEmails(response.data, true);
-                        chrome.tabs.remove(tabId)
+                var initial_data = response.data;
+                if(initial_data.url != undefined) {
+                    let tabObj = {
+                        url: initial_data.url
                       }
-                    }
-                  }
-                }
+                    chrome.windows.create(tabObj, function (data) {
+                        let tabids = [];
+                        for(var i=0;i<data.tabs.length;i++){
+                          tabids.push(data.tabs[i].id);
+                        }
+                        chrome.tabs.remove(parseInt(localStorage['search_tabId']))
+                        localStorage['search_tabId'] = tabids;
+                        console.log(localStorage['search_tabId'])
+                    });
+                } else {
+                    var emails = [];
+                    if ((initial_data) && (initial_data.length > 0)) {
+                        count = 0;
+                        for (var iNo = 0; iNo < initial_data.length; iNo++) {
+                            var email = initial_data[iNo];
+                            if ((email !== '') && (emails.indexOf(email) == -1)) {
+                                emails.push(email);
+                                count += 1;
+                            }
+                        }
+                        showEmails(emails);
 
-                if (response.data && (response.data.length > 0) && (response.data.length < 200)) {
-                    // checkPreviouslySent(response.data, tab.url);
+                        if (!((localStorage['disableCollect'] && localStorage['disableCollect'] == 'true'))) {
+                            saveCollectedEmails(response.data , tabId_);
+                        }
+                        console.log(localStorage['automatedCrawls']);
+                        if(localStorage['automatedCrawls'] && localStorage['automatedCrawls'].length > 0){
+                        if(tab.status == "complete"){
+                            let urlObjs = JSON.parse(localStorage['automatedCrawls']);
+                            for(let i = 0; i<urlObjs.length; i++){
+                            if(urlObjs[i].tabId == tabId && urlObjs[i].windowId == tab.windowId){
+                                saveCollectedEmails(response.data, true);
+                                chrome.tabs.remove(tabId)
+                            }
+                            }
+                        }
+                        } else if (response.data && (response.data.length > 0) && (response.data.length < 200)) {
+                            // checkPreviouslySent(response.data, tab.url);
+                        }
+                    }
                 }
+        } else if(localStorage['search'] != undefined && localStorage['search'] != '0') {
+            console.log("here")
+            let tabs = localStorage['search_tabId'].split(',');
+            let index = tabs.indexOf(tabId);
+            tabs.splice(index, 1);
+            if(tabs.length <= 0){
+                localStorage['search'] = '0';
             }
-        }
+            localStorage['search_tabId'] = tabs;
+            chrome.tabs.remove(tabId);
+            }
         });
 
     }
