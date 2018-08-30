@@ -124,12 +124,31 @@ function searchEmails(pageText, domain, method) {
             if(emails.length > 0){
                 return emails;
             } else {
-                getUrls(document.all[0].innerHTML);
+                let urls = getUrls(document.all[0].innerHTML);
+                urls = {url : urls};
+                console.log(urls);
             }
         } else {
             return prepareEmails(emails, domain.domain, method, document.all[0].innerHTML);
         }
     }
+}
+
+function getUrls(html) {
+    let alllinks = html.match(/<a\s+(?:[^>]*?\s+)?href="([^"]*)"/ig)
+    console.log(alllinks);
+    let finalLinks = [];
+    for(i=0;i<alllinks.length;i++) {
+        if (alllinks[i].indexOf('search') == -1 && alllinks[i].indexOf('#') == -1 && alllinks[i].indexOf('class') == -1 && alllinks[i].indexOf('javascript:void') == -1 && alllinks[i].indexOf('google') == -1 && alllinks[i].indexOf('speed') == -1 && alllinks[i].indexOf('youtube') == -1){
+            let link = alllinks[i];
+            link = link.replace('<a href="', "");
+            link = link.replace('"', "");
+            console.log(link);
+            finalLinks.push(link);
+            console.log(finalLinks);
+        }
+    }
+    return finalLinks;
 }
 
 function extractDiv(html, email){
