@@ -126,7 +126,7 @@ function searchEmails(pageText, domain, method) {
             } else {
                 let urls = getUrls(document.all[0].innerHTML);
                 urls = {url : urls};
-                console.log(urls);
+                return urls;
             }
         } else {
             return prepareEmails(emails, domain.domain, method, document.all[0].innerHTML);
