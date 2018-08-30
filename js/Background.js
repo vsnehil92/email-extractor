@@ -215,6 +215,7 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
            domain = tldjs.getDomain(tab.url);
         }
         chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
+            console.log(response, response.data)
             if ((response) && (response.data)) {
                 tabId_ = tabId;
                 var initial_data = response.data;;
@@ -251,6 +252,11 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
                 }
             }
         }
+        console.log(tabId);
+            if(localStorage['search'] != undefined || localStorage['search'] != '0' && response.method == "getEmailsGoogle") {
+                localStorage['search'] = '0';
+                chrome.tabs.remove(tabId)
+            }
         });
 
     }
