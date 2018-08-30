@@ -15,7 +15,7 @@ var invalidLocalParts = ['the', '2', '3', '4', '123', '20info', 'aaa', 'ab', 'ab
     'name', 'need', 'nfo', 'ninfo', 'now', 'o', 'online', 'post', 'rcom.TripResearch.userreview.UserReviewDisplayInfo', 's', 'sales2', 'test', 'up', 'we', 'www', 'xxx', 'xxxxx', 
     'y', 'username', 'firstname.lastname'];
 
-function prepareEmails(emails, domain, method, html=undefined) {
+function prepareEmails(emails, domain, method, html=undefined, search) {
     var emailsNew = [], tempEmail = [];
     for (var iNo = 0; iNo < emails.length; iNo++) {
         var email = emails[iNo].toLowerCase().trim();
@@ -95,7 +95,14 @@ function prepareEmails(emails, domain, method, html=undefined) {
                         newEmail = {email: email, domain: dom, source: domain, div: div};
                     }
                     newEmail = JSON.stringify(newEmail);
-                    emailsNew.push(newEmail);  
+                    if(search) {
+                        if (((newEmail.toLowerCase().indexOf(search.fname.toLowerCase()) != -1) || (newEmail.toLowerCase().indexOf(search.lname.toLowerCase()) != -1) ) && (newEmail.toLowerCase().indexOf(search.cdomain.toLowerCase()) != -1)) {
+                        console.log(newEmail);
+                        emailsNew.push(newEmail); 
+                        }
+                    } else {
+                        emailsNew.push(newEmail); 
+                    } 
                 }  
             }
         }
@@ -107,12 +114,18 @@ function prepareEmails(emails, domain, method, html=undefined) {
 function searchEmails(pageText, domain, method) {
     pageText = pageText.replace(/\\n/ig, ' ');
     var emails = pageText.match(/\b[a-z\d-][_a-z\d-+]*(?:\.[_a-z\d-+]*)*@[a-z\d]+[a-z\d-]*(?:\.[a-z\d-]+)*(?:\.[a-z]{2,63})\b/gi);
-    console.log("emails : ", emails)
+    console.log(domain)
     if ((emails !== null) && (emails.length > 0)) {
         if (domain.ser == undefined || domain.ser == '0'){
             return prepareEmails(emails, domain, method, document.all[0].innerHTML);
         } else if(domain.domain.indexOf('google') != -1){
-            return prepareEmails(emails, domain.domain, method, document.all[0].innerHTML);
+            let search = JSON.parse(domain.ser);
+            emails = prepareEmails(emails, domain.domain, method, document.all[0].innerHTML, search);
+            if(emails.length > 0){
+                return emails;
+            } else {
+                getUrls(document.all[0].innerHTML);
+            }
         } else {
             return prepareEmails(emails, domain.domain, method, document.all[0].innerHTML);
         }
