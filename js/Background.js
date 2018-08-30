@@ -226,7 +226,8 @@ chrome.tabs.onUpdated.addListener(function (tabId, info, tab) {
            domain = tldjs.getDomain(tab.url);
         }
         chrome.tabs.sendMessage(tabId, { method: methodName, domain: domain }, function (response) {
-            console.log(response, response.data)
+            console.log("respose");
+            console.log(response.data)
             if ((response) && (response.data)) {
                 tabId_ = tabId;
                 var initial_data = response.data;
