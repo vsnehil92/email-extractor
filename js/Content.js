@@ -132,6 +132,11 @@ function searchEmails(pageText, domain, method) {
     }
 }
 
+function getUrls(html) {
+    let url = html.match(/<a\s+(?:[^>]*?\s+)?((href)|(src))="([^\/|#]+[^"]*)"/gm)
+    console.log(url)
+}
+
 function extractDiv(html, email){
     let tempHtml = html;
     let splitData = tempHtml.split(email)
